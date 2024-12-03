@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteBase /DWES/DWES03/TE02/tarea/api/v1/public
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?/$1 [QSA,L]
