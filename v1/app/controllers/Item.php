@@ -38,7 +38,7 @@ class Item {
             foreach ($claves as $clave) echo json_encode($jsonData[$clave]) . ",\n";
             echo "]";
         }
-        //var_dump($claves);
+        //var_dump($claves);;
         
     }
     
