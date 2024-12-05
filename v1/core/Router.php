@@ -13,18 +13,26 @@ class Router {
         return $this->routes;
     }
 
-    public function match($url) {
-        foreach($this->routes as $route=>$params) {
-            if($url['path'] == $route) {
-                if($url['controller'] == $params['controller'] && 
-                $url['action'] == $params['action']) {
-                    $this->params = $params;
-                    return true;
-                }
+
+    public function matchRoutes($url) {
+        foreach ($this->routes as $route=>$params) {
+            $pattern = str_replace(['{id}'], ['([0-9]+)'], $route);
+            $pattern = str_replace(['{artist}'], ['([0-9]+)'], $pattern);
+            $pattern = str_replace(['{format}'], ['([0-9]+)'], $pattern);
+            $pattern = str_replace(['{key}'], ['([a-z]+)'], $pattern);
+            $pattern = str_replace(['{order}'], ['(asc|desc)'], $pattern);
+            $pattern = str_replace(['/'], ['\/'], $pattern);
+
+            $pattern = '/^' . $pattern . '$/';
+
+            if (preg_match($pattern, $url['path'])) {
+                $this->params = $params;
+                return true;
             }
         }
-        // Si no coincide con ninguna ruta, devuelve false
+
         return false;
+
     }
 
     public function getParams() {

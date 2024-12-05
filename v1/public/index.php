@@ -1,34 +1,72 @@
 <?php
 
 require '../core/Router.php';
-require '../app/controllers/Items.php';
+require '../app/controllers/Item.php';
 
 $url = $_SERVER['QUERY_STRING'];
-echo 'QUERY_STRING = ' . $url . '<br>';
-/* echo 'REQUEST_URI = ' . $_SERVER['REQUEST_URI']. '<br>';
-echo 'PHP_SELF = ' . $_SERVER['PHP_SELF']. '<br>';
-echo 'DOCUMENT_ROOT = ' . $_SERVER['DOCUMENT_ROOT']. '<br>';
-echo 'SCRIPT_FILENAME = ' . $_SERVER['SCRIPT_FILENAME']. '<br>';
-echo 'PATH_TRANSLATED = ' . $_SERVER['PATH_TRANSLATED']. '<br>';
-echo 'SCRIPT_NAME = ' . $_SERVER['SCRIPT_NAME']. '<br>';
-echo 'PATH_INFO = ' . $_SERVER['PATH_INFO']. '<br>';
-echo 'ORIG_PATH_INFO = ' . $_SERVER['ORIG_PATH_INFO']. '<br>';
-echo dirname(__FILE__) . "<br>"; */
-
+//echo 'QUERY_STRING = ' . $url . '<br>';
 
 $router = new Router();
 
-$router->add('/', array(
+$router->add('', array(
     'controller'=>'Home',
     'action'=>'index'
     )
 );
 
-$router->add('/items/create', array(
-    'controller'=>'Items',
-    'action'=>'create'
+// Rutas GET
+
+$router->add('/items', array(
+    'controller'=>'Item',
+    'action'=>'getAllItems'
     )
 );
+
+$router->add('/item/{id}', array(
+    'controller'=>'Item',
+    'action'=>'getItemById'
+    )
+);
+
+$router->add('/items/artist/{artist}', array(
+    'controller'=>'Item',
+    'action'=>'getItemsByArtist'
+    )
+);
+
+$router->add('/items/format/{format}', array(
+    'controller'=>'Item',
+    'action'=>'getItemsByFormat'
+    )
+);
+
+$router->add('/items/order/{key}/{order}', array(
+    'controller'=>'Item',
+    'action'=>'sortItemsByKey'
+    )
+);
+
+
+// Rutas POST (Create, Put, Delete)
+
+$router->add('/item/create', array(
+    'controller'=>'Item',
+    'action'=>'createItem'
+    )
+);
+
+$router->add('/item/update/{id}', array(
+    'controller'=>'Item',
+    'action'=>'updateItem'
+    )
+);
+
+$router->add('/item/delete/{id}', array(
+    'controller'=>'Item',
+    'action'=>'deleteItem'
+    )
+);
+
 
 /* echo '<pre>';
 print_r($router->getRoutes()) . '<br>';
@@ -39,10 +77,13 @@ $urlParams = explode('/', $url);
 $urlArray = array(
     'HTTP'=>$_SERVER['REQUEST_METHOD'],
     'path'=>$url,
-    'controller'=>$urlParams[1] ?? '',
-    'action'=>$urlParams[2] ?? '',
-    'params'=>$urlParams[3] ?? ''
+    'controller'=>'',
+    'action'=>'',
+    'params'=> array()
 );
+
+//$urlArray['action'] = is_numeric($urlParams[2]) ? '' : $urlParams[2];
+//$urlArray[]
 
 // var_dump($urlParams);
 
@@ -51,9 +92,16 @@ $urlArray = array(
 if (!empty($urlParams[1])) {
     $urlArray['controller'] = ucwords($urlParams[1]);
     if (!empty($urlParams[2])) {
-        $urlArray['action'] = $urlParams[2];
+
+        if (is_numeric($urlParams[2])) {
+            $urlArray['params'][] = $urlParams[2];
+        } else $urlArray['action'] = $urlParams[2];
+
         if(!empty($urlParams[3])) {
-            $urlArray['params'] = $urlParams[3];
+            $urlArray['params'][] = $urlParams[3];
+            
+            if (!empty($urlParams[4])) $urlArray['params'][] = $urlParams[4];
+
         }
     } else {
         $urlArray['action'] = 'index';
@@ -63,17 +111,39 @@ if (!empty($urlParams[1])) {
     $urlArray['action'] = 'index';
 }
 
-if($router->match($urlArray)) {
+
+$params = [];
+
+if ($router->matchRoutes($urlArray)) {
+
+    if ($urlArray['HTTP'] === 'GET') {
+        $params = $urlArray['params'] ?? null;
+    } elseif ($urlArray['HTTP'] === 'POST') {
+        $json = file_get_contents('php://input');
+        $params[] = json_decode($json, true);
+    } elseif ($urlArray['HTTP'] === 'PUT') {
+        $id = intval($urlArray['params'][0]) ?? null;
+        $json = file_get_contents('php://input');
+        $params[] = $id;
+        $params[] = json_decode($json, true);
+    } elseif ($urlArray['HTTP'] === 'DELETE') {
+        $params = $urlArray['params'] ?? null;
+    }
+    
+    
     $controller = $router->getParams()['controller'];
     $action = $router->getParams()['action'];
-
+    
     $controller = new $controller();
-    $controller->$action();
-
+    
+    if (method_exists($controller, $action)) {
+        $resp = call_user_func_array([$controller, $action], $params);
+    } else {
+        echo "El método no existe";
+    }
 } else {
-    echo "No hay ruta para esa URL: " . $url;
-}
+    //echo "No se encontró ruta para esa URL.";
 
-echo '<pre>';
-print_r($urlArray) . '<br>';
-echo '</pre>';
+    http_response_code(404);
+    echo "No se encontró ruta para esa URL: " . $url;
+}
