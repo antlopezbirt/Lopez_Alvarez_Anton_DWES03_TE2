@@ -33,13 +33,11 @@ class Item {
         $rutaJson = '../data/items.json';
         $jsonString = file_get_contents($rutaJson);
         $jsonData = json_decode($jsonString, true);
+        $jsonResultado = array();
         if ($claves = array_keys(array_column($jsonData, 'artist'), strval($id))) {
-            echo "[\n";
-            foreach ($claves as $clave) echo json_encode($jsonData[$clave]) . ",\n";
-            echo "]";
+            foreach ($claves as $clave) $jsonResultado[] = $jsonData[$clave];
+            echo json_encode($jsonResultado);
         }
-        //var_dump($claves);;
-        
     }
     
     function getItemsByFormat($id) {
