@@ -5,14 +5,14 @@
       "artist":"The Who",
       "format":"CD",
       "year":"2005",
-      "orig_year":"1969",
+      "origYear":"1969",
       "label":"Polydor",
       "rating":"10",
       "comment":"Edición deluxe. De mis discos favoritos",
-      "buy_price":"20",
+      "buyPrice":"20",
       "condition":"NM",
-      "sell_price":"25",
-      "external_ids":{
+      "sellPrice":"25",
+      "externalIds":{
          "discogs":"1798436",
          "musicbrainz":"4147c0d3-7939-3484-bde6-b6fbefd7bc3b"
       }
@@ -23,14 +23,14 @@
       "artist":"Ramones",
       "format":"CD",
       "year":"2017",
-      "orig_year":"1977",
+      "origYear":"1977",
       "label":"Rhino Records",
       "rating":"8",
       "comment":"Buena reedición",
-      "buy_price":"22",
+      "buyPrice":"22",
       "condition":"M",
-      "sell_price":"20",
-      "external_ids":{
+      "sellPrice":"20",
+      "externalIds":{
          "discogs":"10589268",
          "musicbrainz":"c5923e07-a09b-469a-af1a-bc5e67e402ec"
       }
@@ -41,14 +41,14 @@
       "artist":"Killing Joke",
       "format":"CD",
       "year":"2005",
-      "orig_year":"1980",
+      "origYear":"1980",
       "label":"Virgin",
       "rating":"8",
       "comment":"Reedición de este disco histórico",
-      "buy_price":"17",
+      "buyPrice":"17",
       "condition":"VG",
-      "sell_price":"20",
-      "external_ids":{
+      "sellPrice":"20",
+      "externalIds":{
          "discogs":"502215",
          "musicbrainz":"0f6924c2-5812-36d8-8a34-df69744ce5e0"
       }
@@ -59,34 +59,34 @@
       "artist":"Cocteau Twins",
       "format":"CD",
       "year":"1999",
-      "orig_year":"1990",
+      "origYear":"1990",
       "label":"4AD",
       "rating":"10",
       "comment":"Edición japonesa muy buscada, disco excelente",
-      "buy_price":"30",
+      "buyPrice":"30",
       "condition":"NM",
-      "sell_price":"35",
-      "external_ids":{
+      "sellPrice":"35",
+      "externalIds":{
          "discogs":"10644727",
          "musicbrainz":"224445b7-35ea-43c2-b8df-0e918292f5ba"
       }
    },
    {
       "id":"104",
-      "title":"Tommy",
+      "title":"Quadrophenia",
       "artist":"The Who",
       "format":"CD",
-      "year":"2005",
-      "orig_year":"1969",
+      "year":"1996",
+      "origYear":"1973",
       "label":"Polydor",
       "rating":"10",
-      "comment":"Edición deluxe. De mis discos favoritos",
-      "buy_price":"20",
-      "condition":"NM",
-      "sell_price":"25",
-      "external_ids":{
-         "discogs":"1798436",
-         "musicbrainz":"4147c0d3-7939-3484-bde6-b6fbefd7bc3b"
+      "comment":"Edición inglesa, excelente estado",
+      "buyPrice":"20",
+      "condition":"EX",
+      "sellPrice":"25",
+      "externalIds":{
+         "discogs":"1085136",
+         "musicbrainz":"e0e2c19a-d9a9-3b59-b69b-6afc14551599"
       }
    },
    {
@@ -95,14 +95,14 @@
       "artist":"Popol Vuh",
       "format":"CD",
       "year":"1992",
-      "orig_year":"1975",
+      "origYear":"1975",
       "label":"Spalax",
       "rating":"9",
       "comment":"Obra maestra de krautrock, edición francesa",
-      "buy_price":"25",
+      "buyPrice":"25",
       "condition":"E",
-      "sell_price":"30",
-      "external_ids":{
+      "sellPrice":"30",
+      "externalIds":{
          "discogs":"737253",
          "musicbrainz":"5bcde2f7-80ac-38fa-994b-ce51df4d50e3"
       }
@@ -113,14 +113,14 @@
       "artist":"Popol Vuh",
       "format":"CD",
       "year":"2019",
-      "orig_year":"1972",
+      "origYear":"1972",
       "label":"BMG",
       "rating":"10",
       "comment":"Un clásico bien remasterizado",
-      "buy_price":"22",
+      "buyPrice":"22",
       "condition":"NM",
-      "sell_price":"30",
-      "external_ids":{
+      "sellPrice":"30",
+      "externalIds":{
          "discogs":"13812171",
          "musicbrainz":"e4efe882-c8b6-45c1-a429-fb7f350225f9"
       }
@@ -131,14 +131,14 @@
       "artist":"aliceffekt",
       "format":"Digital",
       "year":"2014",
-      "orig_year":"2014",
+      "origYear":"2014",
       "label":"self-relase",
       "rating":"9",
       "comment":"Maravillosa banda sonora",
-      "buy_price":"5",
+      "buyPrice":"5",
       "condition":"M",
-      "sell_price":"25",
-      "external_ids":{
+      "sellPrice":"25",
+      "externalIds":{
          "musicbrainz":"681ad693-9074-4216-aded-d1babfede242"
       }
    },
@@ -148,14 +148,14 @@
       "artist":"The Who",
       "format":"CD",
       "year":"1998",
-      "orig_year":"1971",
+      "origYear":"1971",
       "label":"MCA",
       "rating":"10",
       "comment":"Edición canadiense, obra maestra",
-      "buy_price":"20",
+      "buyPrice":"20",
       "condition":"NM",
-      "sell_price":"27",
-      "external_ids":{
+      "sellPrice":"27",
+      "externalIds":{
          "discogs":"7131107",
          "musicbrainz":"48289c07-fb4c-3c7a-b185-fd800e822325"
       }
@@ -166,14 +166,14 @@
       "artist":"New Order",
       "format":"Maxi",
       "year":"1986",
-      "orig_year":"1986",
+      "origYear":"1986",
       "label":"Factory",
       "rating":"8",
       "comment":"Edición original que incluye el famoso remix de Shep Pettibone",
-      "buy_price":"10",
+      "buyPrice":"10",
       "condition":"VG",
-      "sell_price":"15",
-      "external_ids":{
+      "sellPrice":"15",
+      "externalIds":{
          "discogs":"121190",
          "musicbrainz":"de53b49d-be39-4daf-afe2-d650269862d7"
       }
@@ -184,48 +184,48 @@
       "artist":"Albert Band",
       "format":"Single",
       "year":"1970",
-      "orig_year":"1970",
+      "origYear":"1970",
       "label":"Belter",
       "rating":"10",
       "comment":"Edición original, joya buscadísima",
-      "buy_price":"40",
+      "buyPrice":"40",
       "condition":"NM",
-      "sell_price":"70",
-      "external_ids":{
+      "sellPrice":"70",
+      "externalIds":{
          "discogs":"3374017"
       }
    },
    {
         "id":"111",
         "title":"Rocket to Russia",
-        "artist":"ramones",
+        "artist":"Ramones",
         "format":"Single",
         "year":"1970",
-        "orig_year":"1970",
+        "origYear":"1970",
         "label":"Belter",
         "rating":"10",
         "comment":"Edición original, joya buscadísima",
-        "buy_price":"40",
+        "buyPrice":"40",
         "condition":"NM",
-        "sell_price":"70",
-        "external_ids":{
+        "sellPrice":"70",
+        "externalIds":{
         "discogs":"3374017"
         }
     },
     {
          "id":"112",
          "title":"Ramonesmania",
-         "artist":"ramones",
+         "artist":"Ramones",
          "format":"Single",
          "year":"1970",
-         "orig_year":"1970",
+         "origYear":"1970",
          "label":"Belter",
          "rating":"10",
          "comment":"Edición original, joya buscadísima",
-         "buy_price":"40",
+         "buyPrice":"40",
          "condition":"NM",
-         "sell_price":"70",
-         "external_ids":{
+         "sellPrice":"70",
+         "externalIds":{
          "discogs":"3374017"
          }
      }

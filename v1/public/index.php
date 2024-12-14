@@ -2,6 +2,8 @@
 
 require '../core/Router.php';
 require '../app/controllers/Item.php';
+require '../config/config.php';
+require '../app/models/ItemModel.php';
 
 $url = $_SERVER['QUERY_STRING'];
 //echo 'QUERY_STRING = ' . $url . '<br>';
@@ -145,5 +147,6 @@ if ($router->matchRoutes($urlArray)) {
     //echo "No se encontró ruta para esa URL.";
 
     http_response_code(404);
-    echo "No se encontró ruta para esa URL: " . $url;
+    $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'No se encontró ruta para esa URL: ' . $url];
+    echo json_encode($res);
 }
