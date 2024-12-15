@@ -17,9 +17,9 @@ class Router {
     public function matchRoutes($url) {
         foreach ($this->routes as $route=>$params) {
             $pattern = str_replace(['{id}'], ['([0-9]+)'], $route);
-            $pattern = str_replace(['{artist}'], ['([a-z]+)'], $pattern);
-            $pattern = str_replace(['{format}'], ['([0-9]+)'], $pattern);
-            $pattern = str_replace(['{key}'], ['([a-z]+)'], $pattern);
+            $pattern = str_replace(['{artist}'], ['([A-Za-z\-]+)'], $pattern);
+            $pattern = str_replace(['{format}'], ['([A-Za-z]+)'], $pattern);
+            $pattern = str_replace(['{key}'], ['([A-Za-z]+)'], $pattern);
             $pattern = str_replace(['{order}'], ['(asc|desc)'], $pattern);
             $pattern = str_replace(['/'], ['\/'], $pattern);
 
