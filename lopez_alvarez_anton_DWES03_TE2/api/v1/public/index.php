@@ -4,10 +4,10 @@ require '../config/config.php';
 require '../core/Router.php';
 require '../app/controllers/Item.php';
 require '../app/models/ItemModel.php';
-require '../app/helpers/Response.php';
+require '../utils/Response.php';
 
 $url = $_SERVER['QUERY_STRING'];
-//echo 'QUERY_STRING = ' . $url . '<br>';
+
 
 $router = new Router();
 
@@ -65,10 +65,6 @@ $router->add('/item/delete/{id}', array(
 );
 
 
-/* echo '<pre>';
-print_r($router->getRoutes()) . '<br>';
-echo '</pre>'; */
-
 $urlParams = explode('/', $url);
 
 $urlArray = array(
@@ -79,13 +75,8 @@ $urlArray = array(
     'params'=> array()
 );
 
-//$urlArray['action'] = is_numeric($urlParams[2]) ? '' : $urlParams[2];
-//$urlArray[]
 
-// var_dump($urlParams);
-
-// Si el controlador está vacío...
-// Si no, recoge los valores de controlador y parámetros
+// Si el controlador no está vacío, recoge los valores del controlador y parámetros
 if (!empty($urlParams[1])) {
     $urlArray['controller'] = ucwords($urlParams[1]);
     if (!empty($urlParams[2])) {
@@ -104,8 +95,9 @@ if (!empty($urlParams[1])) {
         $urlArray['action'] = 'index';
     }
 } else {
-    $urlArray['controller'] = 'Home';
-    $urlArray['action'] = 'index';
+    // En caso de que no haya controlador, se devuelve un 404.
+    $res = new Response(404, 'No se encontró ruta para esa URL: ' . $url);
+    $res->enviar();
 }
 
 
@@ -140,8 +132,6 @@ if ($router->matchRoutes($urlArray)) {
     }
 } else {
     // En caso de que no se haga match, se devuelve un 404.
-
-    http_response_code(404);
-    $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'No se encontró ruta para esa URL: ' . $url];
-    echo json_encode($res);
+    $res = new Response(404, 'No se encontró ruta para esa URL: ' . $url);
+    $res->enviar();
 }

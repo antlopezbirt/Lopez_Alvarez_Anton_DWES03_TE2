@@ -318,5 +318,41 @@
             "discogs": "9975883",
             "musicbrainz": "76dccf5b-c8b0-44b1-93a8-fb739a066bc4"
         }
+    },
+    "19": {
+        "id": 119,
+        "title": "Through the Looking Glass",
+        "artist": "Midori Takada",
+        "format": "CD",
+        "year": 2017,
+        "origYear": 1983,
+        "label": "WRWTFWW Records",
+        "rating": 9,
+        "comment": "Reedici\u00f3n suiza con descarga digital. Muy bueno.",
+        "buyPrice": 20,
+        "condition": "NM",
+        "sellPrice": 28,
+        "externalIds": {
+            "discogs": "9975883",
+            "musicbrainz": "76dccf5b-c8b0-44b1-93a8-fb739a066bc4"
+        }
+    },
+    "20": {
+        "id": 120,
+        "title": "Through the Looking Glass",
+        "artist": "Midori Takada",
+        "format": "LP",
+        "year": 2020,
+        "origYear": 1983,
+        "label": "WRWTFWW Records",
+        "rating": 9,
+        "comment": "Reedici\u00f3n suiza con descarga digital. Muy bueno.",
+        "buyPrice": 20,
+        "condition": "NM",
+        "sellPrice": 28,
+        "externalIds": {
+            "discogs": "8888",
+            "musicbrainz": "6666"
+        }
     }
 }

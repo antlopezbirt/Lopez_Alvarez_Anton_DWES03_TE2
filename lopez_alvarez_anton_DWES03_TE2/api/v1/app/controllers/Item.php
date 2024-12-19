@@ -1,13 +1,15 @@
 <?php
 
+require ('../utils/JSONFileUtil.php');
+
 class Item {
 
-    private string $jsonString;
-    private array $jsonData;
+    private $ficheroJson;
+    private $jsonData;
 
-    public function __construct() {
-       $this->jsonString = file_get_contents(PATH_JSON);
-       $this->jsonData = json_decode($this->jsonString, true); 
+    function __construct() {
+        $this->ficheroJson =  new JSONFileUtil(PATH_JSON);
+        $this->jsonData = $this->ficheroJson->getJsonDataArray();
     }
 
     // Devuelve todos los Items de la coleccion musical
@@ -56,7 +58,7 @@ class Item {
         $res->enviar();
     }
     
-    // Devuelve todos los Items cuyo artista sea el recibido, o un 404 si no se encuentra ninguno
+    // Devuelve todos los ítems cuyo artista sea el recibido, o un 404 si no se encuentra ninguno
     function getItemsByArtist($artist) {
 
         // Sustituye guiones por espacios en caso de que los haya
@@ -89,6 +91,7 @@ class Item {
         }
     }
     
+    // Devuelve todos los items que tengan el formato recibido, o un 404 si no existe ese formato
     function getItemsByFormat($format) {
 
         // Declara el array donde se recogeran los modelos de Items
@@ -119,6 +122,7 @@ class Item {
         }
     }
     
+    // Ordena los items en base a una clave y un orden recibidos
     function sortItemsByKey($key, $order) {
 
         // Primero comprueba si la clave recibida existe en el JSON
@@ -155,6 +159,7 @@ class Item {
 
     // Consultas POST (Create, Put, Delete)
 
+    // Crea un item nuevo a partir de los datos recibidos
     function createItem($data) {
 
         try {
@@ -176,24 +181,14 @@ class Item {
     
                     // Añade el Item creado al array jsonData
                     array_push($this->jsonData, $nuevoItem);
-    
-                    // Intenta guardar los datos actualizados en el fichero
-                    try {
-                        $fp = fopen(PATH_JSON, 'w');
-                        $resultado = fwrite($fp, json_encode($this->jsonData, JSON_PRETTY_PRINT));
-    
-                        if ($resultado) {
-                            $res = new Response(201, $nuevoItem);
-                            $res->enviar();
-                        }
-                    // No se ha podido escribir en el fichero
-                    } catch (Exception $e) {
-                        $res = new Response(500, 'No se pudo guardar el ítem: ' . $e->getMessage());
-                        $res->enviar();  
 
-                    // En cualquier caso, cierra el puntero.
-                    } finally {
-                        if ($fp) fclose($fp);
+                    // Guarda los datos en el fichero
+                    if ($this->ficheroJson->guardarDatos($this->jsonData)) {
+                        $res = new Response(201, $nuevoItem);
+                        $res->enviar();
+                    } else {
+                        $res = new Response(500, 'No se pudo guardar el ítem.');
+                        $res->enviar();  
                     }
 
                 // El ítem recibido no tienen buen formato internamente
@@ -215,106 +210,93 @@ class Item {
         }
     }
     
+    // Actualiza un ítem a partir de su ID y los datos recibidos
     function updateItem($id, $data) {
 
-        $encontrado = false;
-
         // Busca el item e intenta actualizar los datos
-        foreach ($this->jsonData as $item) {
+        foreach ($this->jsonData as $key => $item) {
+
             if (intval($item['id']) === $id) {
-                $encontrado = true;
-                $claveInexistente = false;
 
-                // Si lo encuentra, trata de actualizarlo
+                // Si lo encuentra, instancia un Item con sus datos
+                $itemActualizar = new ItemModel($item['id'], $item['title'], 
+                        $item['artist'], $item['format'], $item['year'], 
+                        $item['origYear'], $item['label'], $item['rating'],
+                        $item['comment'], $item['buyPrice'], $item['condition'], 
+                        $item['sellPrice'], $item['externalIds']);
+                
+                // Actualiza el objeto Item
                 foreach($data as $clave => $valor) {
-                    // Si existe la clave, actualiza el valor en jsonData
+
+                    // Si existe el atributo, lo actualiza
                     if (array_key_exists($clave, $item)) {
-                        $item[$clave] = $valor;
-                    }
-                        
 
+                        $setter = 'set' . ucwords($clave);
 
-                    // En caso contrario, registra el error y sale del bucle
-                    else {
-                        $claveInexistente = true;
-                        break;
+                        // Llama al método setter correspondiente
+                        call_user_func([$itemActualizar, $setter], $valor); 
+                    
+                    // En caso contrario, responde con el fallo y sale del bucle
+                    } else {
+                        $res = new Response(400, 'JSON recibido con mal formato');
+                        $res->enviar();
+
+                        return false;
                     }
                 }
-                
-                break;
-            }
-        }
 
-        // Si lo ha encontrad
-        if ($encontrado !== false) {
+                // Sustituye el item actualizado en jsonData
+                $this->jsonData[$key] = $itemActualizar;
 
-            if (!$claveInexistente) {
-                
                 // Escribe los datos actualizados en el fichero
-                try {
-                    $fp = fopen(PATH_JSON, 'w');
-                    $resultado = fwrite($fp, json_encode($this->jsonData, JSON_PRETTY_PRINT));
+                if ($this->ficheroJson->guardarDatos($this->jsonData)) {
+                    $res = new Response(204, $itemActualizar);
+                    $res->enviar();
+                    return true;
 
-                    if ($resultado) {
-                        http_response_code(204);
-                        $res = ['status' => 'No Content', 'code' => '204', 'response' => 'Ítem actualizado'];
-                        echo json_encode($res);
-                    }
-
-                } catch (Exception $e) {
-
-                    http_response_code(500);
-                    $res = ['status' => 'Internal Server Error', 'code' => '500', 'response' => 'No se pudo guardar la actualización: ' . $e->getMessage()];
-                    echo json_encode($res);
-
-                } finally {
-                    if ($fp) fclose($fp);
+                } else {
+                    $res = new Response(500, 'No se pudo guardar la actualización.');
+                    $res->enviar();
+                    return false;
                 }
-
-            // Alguna clave no existia
-            } else {
-                http_response_code(400);
-                $res = ['status' => 'Bad Request', 'code' => '400', 'response' => 'JSON mal formateado'];
-                echo json_encode($res);
             }
-
-        } else {
-            http_response_code(404);
-            $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Ítem no encontrado (' . $id . ')'];
-            echo json_encode($res);
         }
+
+        // Si llega aquí es que no ha encontrado el ítem. Devuelve un 404
+        $res = new Response(404, 'Ítem no encontrado (' . $id . ')');
+        $res->enviar();
     }
     
+    // Elimina el ítem a partir de su ID
     function deleteItem($id) {
 
-        // Busca el ID en los datos, recibiendo la clave o un false
-        $encontrado = array_search(strval($id), array_column($this->jsonData, 'id'));
+        // Recorre el JSON en busca del item
+        foreach ($this->jsonData as $key => $item) {
 
-        // Si encuentra el Item, lo elimina
-        if ($encontrado) {
-            // Anexa el nuevo elemento al array de Items
-            unset($this->jsonData[$encontrado]);
+            // Si encuentra el Item, lo elimina y guarda los cambios en el fichero
+            if ($item['id'] === $id) {
+                
+                // Retira el item de jsonData
+                unset($this->jsonData[$key]);
 
-            // Escribe los datos en el fichero
-            $fp = fopen(PATH_JSON, 'w');
-            $resultado = fwrite($fp, json_encode($this->jsonData, JSON_PRETTY_PRINT));
-            fclose($fp);
+                // Escribe los datos actualizados en el fichero
+                if ($this->ficheroJson->guardarDatos($this->jsonData)) {
+                    // En caso de éxito devuelve un 204 (cabecera 200) y el ítem eliminado
+                    $res = new Response(204, $item);
+                    $res->enviar();
 
-            // Envia la respuesta
-            if ($resultado) {
-                http_response_code(204);
-                $res = ['status' => 'No Content', 'code' => '204', 'response' => 'Contenido eliminado'];
-                echo json_encode($res);
-            } else {
-                http_response_code(500);
-                $res = ['status' => 'Internal Server Error', 'code' => '500', 'response' => 'No se puedo completar la operación'];
-                echo json_encode($res);
+                    return true;
+                } else {
+                    $res = new Response(500, 'No se pudo guardar la actualización.');
+                    $res->enviar();
+
+                    return false;
+                }
             }
-        // Si no encuentra el Item a eliminar, responde con un 404
-        } else {
-            http_response_code(404);
-            $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Ítem no encontrado (' . $id . ')'];
-            echo json_encode($res);
         }
+
+        // Si llega aquí es que no ha encontrado el item, devuelve un 404
+        $res = new Response(404, 'Item no encontrado (' . $id . ')');
+        $res->enviar();
     }
 }
