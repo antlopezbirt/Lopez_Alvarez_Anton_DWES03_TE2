@@ -16,7 +16,7 @@ class Item {
         $arrayItems = array();
 
         // Recorre el objeto JSON y acumula los datos en un array de modelos Item
-        foreach ($this->jsonData as $clave => $item) {
+        foreach ($this->jsonData as $item) {
             $arrayItems[] = new ItemModel($item['id'], $item['title'], 
                 $item['artist'], $item['format'], $item['year'], 
                 $item['origYear'], $item['label'], $item['rating'],
@@ -32,27 +32,29 @@ class Item {
     // Devuelve el Item que se corresponda con el ID recibido, o un 404 si no existe
     function getItemById($id) {
 
-        // Busca el ID en los datos, recibiendo la clave o un false
-        $encontrado = array_search($id, array_column($this->jsonData, 'id'));
+        // Recorre el JSON en busca del item
+        foreach ($this->jsonData as $item) {
 
-        // Si encuentra el Item, instancia un modelo y lo devuelve
-        if ($encontrado !== false) {
-            $item = new ItemModel($this->jsonData[$encontrado]['id'], $this->jsonData[$encontrado]['title'], 
-                $this->jsonData[$encontrado]['artist'], $this->jsonData[$encontrado]['format'], $this->jsonData[$encontrado]['year'], 
-                $this->jsonData[$encontrado]['origYear'], $this->jsonData[$encontrado]['label'], $this->jsonData[$encontrado]['rating'],
-                $this->jsonData[$encontrado]['comment'], $this->jsonData[$encontrado]['buyPrice'], $this->jsonData[$encontrado]['condition'], 
-                $this->jsonData[$encontrado]['sellPrice'], $this->jsonData[$encontrado]['externalIds']);
+            // Si encuentra el Item, instancia un modelo con sus datos y lo devuelve
+            if ($item['id'] === $id) {
+                $item = new ItemModel($item['id'], $item['title'], 
+                $item['artist'], $item['format'], $item['year'], 
+                $item['origYear'], $item['label'], $item['rating'],
+                $item['comment'], $item['buyPrice'], $item['condition'], 
+                $item['sellPrice'], $item['externalIds']);
             
-            // Responde con el Item serializado
-            $res = ['status' => 'OK', 'code' => '200', 'response' => $item];
-            echo json_encode($res);
+                // Responde con el Item serializado
+                $res = ['status' => 'OK', 'code' => '200', 'response' => $item];
+                echo json_encode($res);
 
-        // Si no se encuentra, devuelve un codigo 404 y un mensaje explicativo
-        } else {
-            http_response_code(404);
-            $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Item no encontrado'];
-            echo json_encode($res);
+                return true;
+            }
         }
+
+        // Si llega aquí es que no ha encontrado el item, devuelve un 404
+        http_response_code(404);
+        $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Item no encontrado'];
+        echo json_encode($res);
     }
     
     // Devuelve todos los Items cuyo artista sea el recibido, o un 404 si no se encuentra ninguno
@@ -61,25 +63,27 @@ class Item {
         // Sustituye guiones por espacios en caso de que los haya
         $artist = str_replace('-', ' ', $artist);
 
-        // Busca todas las ocurrencias de ese artista y guarda las claves
-        $encontrados = array_keys(array_column($this->jsonData, 'artist'), $artist);
+        // Declara el array donde se recogeran los modelos de Items
+        $arrayItems = array();
 
-        if ($encontrados) {
-            // Declara el array donde se recogeran los modelos de Items
-            $arrayItems = array();
-
-            foreach ($encontrados as $clave) {
-                $arrayItems[] = new ItemModel($this->jsonData[$clave]['id'], $this->jsonData[$clave]['title'], 
-                $this->jsonData[$clave]['artist'], $this->jsonData[$clave]['format'], $this->jsonData[$clave]['year'], 
-                $this->jsonData[$clave]['origYear'], $this->jsonData[$clave]['label'], $this->jsonData[$clave]['rating'],
-                $this->jsonData[$clave]['comment'], $this->jsonData[$clave]['buyPrice'], $this->jsonData[$clave]['condition'], 
-                $this->jsonData[$clave]['sellPrice'], $this->jsonData[$clave]['externalIds']);
+        // Recorre el JSON en busca del item
+        foreach ($this->jsonData as $item) {
+            // Acumula en el array los Items de ese artista
+            if ($item['artist'] === $artist) {
+                $arrayItems[] = new ItemModel($item['id'], $item['title'], 
+                $item['artist'], $item['format'], $item['year'], 
+                $item['origYear'], $item['label'], $item['rating'],
+                $item['comment'], $item['buyPrice'], $item['condition'], 
+                $item['sellPrice'], $item['externalIds']);
             }
+        }
 
-            // Responde con todos los items serializados (mediante jsonSerialize)
+        // Si ha encontrado alguno, responde con los items serializados (jsonSerialize)
+        if (count($arrayItems) > 0) {
             $res = ['status' => 'OK', 'code' => '200', 'response' => $arrayItems];
             echo json_encode($res);
 
+        // En caso contrario un 404
         } else {
             http_response_code(404);
             $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Artista no encontrado'];
@@ -89,25 +93,28 @@ class Item {
     
     function getItemsByFormat($format) {
 
-        // Busca todas las ocurrencias de ese formato y guarda las claves
-        $encontrados = array_keys(array_column($this->jsonData, 'format'), $format);
+        // Declara el array donde se recogeran los modelos de Items
+        $arrayItems = array();
 
-        if ($encontrados) {
-            // Declara el array donde se recogeran los modelos de Items
-            $arrayItems = array();
+        // Recorre el JSON en busca del item
+        foreach ($this->jsonData as $item) {
 
-            foreach ($encontrados as $clave) {
-                $arrayItems[] = new ItemModel($this->jsonData[$clave]['id'], $this->jsonData[$clave]['title'], 
-                $this->jsonData[$clave]['artist'], $this->jsonData[$clave]['format'], $this->jsonData[$clave]['year'], 
-                $this->jsonData[$clave]['origYear'], $this->jsonData[$clave]['label'], $this->jsonData[$clave]['rating'],
-                $this->jsonData[$clave]['comment'], $this->jsonData[$clave]['buyPrice'], $this->jsonData[$clave]['condition'], 
-                $this->jsonData[$clave]['sellPrice'], $this->jsonData[$clave]['externalIds']);
+            // Acumula en el array los Items de ese artista
+            if ($item['format'] === $format) {
+                $arrayItems[] = new ItemModel($item['id'], $item['title'], 
+                $item['artist'], $item['format'], $item['year'], 
+                $item['origYear'], $item['label'], $item['rating'],
+                $item['comment'], $item['buyPrice'], $item['condition'], 
+                $item['sellPrice'], $item['externalIds']);
             }
+        }
 
-            // Responde con todos los items serializados (mediante jsonSerialize)
+        // Si ha encontrado alguno, responde con los items serializados (jsonSerialize)
+        if (count($arrayItems) > 0) {
             $res = ['status' => 'OK', 'code' => '200', 'response' => $arrayItems];
             echo json_encode($res);
 
+        // En caso contrario un 404
         } else {
             http_response_code(404);
             $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Formato no encontrado'];
@@ -117,105 +124,159 @@ class Item {
     
     function sortItemsByKey($key, $order) {
 
-        $order = $order == 'asc' ? SORT_ASC : SORT_DESC;
+        // Primero comprueba si la clave recibida existe en el JSON
+        if (array_key_exists($key, $this->jsonData[0])) {
 
-        array_multisort(array_column($this->jsonData, $key), $order, $this->jsonData);
+            $order = $order == 'asc' ? SORT_ASC : SORT_DESC;
 
-        // Declara el array donde se recogeran los modelos de Items
-        $arrayItems = array();
+            // Ordena los items según los parámetros recibidos
+            array_multisort(array_column($this->jsonData, $key), $order, $this->jsonData);
 
-        // Recorre el objeto JSON y acumula los datos en un array de modelos Item
-        foreach ($this->jsonData as $clave => $item) {
-            $arrayItems[] = new ItemModel($item['id'], $item['title'], 
-                $item['artist'], $item['format'], $item['year'], 
-                $item['origYear'], $item['label'], $item['rating'],
-                $item['comment'], $item['buyPrice'], $item['condition'], 
-                $item['sellPrice'], $item['externalIds']);
+            // Declara el array donde se recogeran los modelos de Items
+            $arrayItems = array();
+
+            // Recorre el objeto JSON y acumula los datos en un array de modelos Item
+            foreach ($this->jsonData as $item) {
+                $arrayItems[] = new ItemModel($item['id'], $item['title'], 
+                    $item['artist'], $item['format'], $item['year'], 
+                    $item['origYear'], $item['label'], $item['rating'],
+                    $item['comment'], $item['buyPrice'], $item['condition'], 
+                    $item['sellPrice'], $item['externalIds']);
+            }
+
+            // Responde con todos los items serializados (mediante jsonSerialize)
+            http_response_code(200);
+            $res = ['status' => 'OK', 'code' => '200', 'response' => $arrayItems];
+            echo json_encode($res);
+
+        } else {
+            // Devuelve un 400, la clave para ordenar no existe
+            http_response_code(400);
+            $res = ['status' => 'OK', 'code' => '400', 'response' => 'La clave para ordenar no existe.'];
+            echo json_encode($res);
         }
-
-        // Responde con todos los items serializados (mediante jsonSerialize)
-        $res = ['status' => 'OK', 'code' => '200', 'response' => $arrayItems];
-        echo json_encode($res);
     }
     
 
     // Consultas POST (Create, Put, Delete)
 
     function createItem($data) {
-        // Si se recibe más de una entrada llega como array multidimensional y no se acepta
-        if (!array_key_exists(0, $data)) {
 
-            // Genera un nuevo ID a partir del mas alto encontrado en el registro
-            $nuevoId = 0;
-            foreach ($this->jsonData as $clave => $item) $nuevoId = max(intval($item['id']), $nuevoId);
-            $nuevoId++;
+        try {
+            // Si se recibe más de una entrada llega como array multidimensional y no se acepta
+            if (!array_key_exists(0, $data)) {
 
-            // Agrega el ID al registro recibido
-            $data = array('id' => strval($nuevoId)) + $data;
-            
-            // Anexa el nuevo elemento al array de Items
-            array_push($this->jsonData, $data);
-
-            // Escribe los datos en el fichero
-            $fp = fopen(PATH_JSON, 'w');
-            $resultado = fwrite($fp, json_encode($this->jsonData, JSON_PRETTY_PRINT));
-            fclose($fp);
-
-            // Envia la respuesta
-            if ($resultado) {
-                http_response_code(201);
-                $res = ['status' => 'Created', 'code' => '201', 'response' => $data];
-                echo json_encode($res);
+                // Genera un nuevo ID a partir del mas alto encontrado en el registro
+                $nuevoId = 0;
+                foreach ($this->jsonData as $item) $nuevoId = max(intval($item['id']), $nuevoId);
+                $nuevoId++;
+    
+                try {
+                    // Intenta generar el nuevo Item a partir de los datos y el nuevo ID
+                    $nuevoItem = new ItemModel($nuevoId, $data['title'], 
+                        $data['artist'], $data['format'], $data['year'], 
+                        $data['origYear'], $data['label'], $data['rating'],
+                        $data['comment'], $data['buyPrice'], $data['condition'], 
+                        $data['sellPrice'], $data['externalIds']);
+    
+                    // Añade el Item creado al array jsonData
+                    array_push($this->jsonData, $nuevoItem);
+    
+                    // Intenta guardar los datos actualizados en el fichero
+                    try {
+                        $fp = fopen(PATH_JSON, 'w');
+                        $resultado = fwrite($fp, json_encode($this->jsonData, JSON_PRETTY_PRINT));
+    
+                        if ($resultado) {
+                            http_response_code(201);
+                            $res = ['status' => 'Created', 'code' => '201', 'response' => $nuevoItem];
+                            echo json_encode($res);
+                        }
+    
+                    } catch (Exception $e) {
+    
+                        http_response_code(500);
+                        $res = ['status' => 'Internal Server Error', 'code' => '500', 'response' => 'No se pudo guardar la operación: ' . $e->getMessage()];
+                        echo json_encode($res);
+    
+                    } finally {
+                        if ($fp) fclose($fp);
+                    }
+    
+                } catch (Exception $e) {
+                    http_response_code(400);
+                    $res = ['status' => 'Internal Server Error', 'code' => '400', 'Error de formato al crear el Item: ' . $e->getMessage()];
+                    echo json_encode($res);
+                }
+    
+    
+            // Ha llegado más de una entrada (o ninguna)
             } else {
-                http_response_code(500);
-                $res = ['status' => 'Internal Server Error', 'code' => '500', 'response' => $data];
+                http_response_code(400);
+                $res = ['status' => 'Bad Request', 'code' => '400', 'response' => 'Solo se admite un Item. (Recibidos: ' . count($data) . ')'];
                 echo json_encode($res);
             }
 
-        // Ha llegado más de una entrada o ninguna
-        } else {
+        // Los datos recibidos no tienen el formato correcto
+        } catch (Error $e) {
             http_response_code(400);
-            $res = ['status' => 'Bad Request', 'code' => '400', 'response' => 'Cantidad de registros inválida (' . count($data) . ')'];
+            $res = ['status' => 'Bad Request', 'code' => '400', 'response' => 'Formato inválido'];
             echo json_encode($res);
         }
     }
     
     function updateItem($id, $data) {
 
-        // Busca el ID en los datos, recibiendo la clave o un false
-        $encontrado = array_search($id, array_column($this->jsonData, 'id'));
+        $encontrado = false;
 
-        // Si encuentra el Item, comienza a iterar los datos para actualizarlo
+        // Busca el item e intenta actualizar los datos
+        foreach ($this->jsonData as $item) {
+            if (intval($item['id']) === $id) {
+                $encontrado = true;
+                $claveInexistente = false;
+
+                // Si lo encuentra, trata de actualizarlo
+                foreach($data as $clave => $valor) {
+                    // Si existe la clave, actualiza el valor en jsonData
+                    if (array_key_exists($clave, $item))
+                        $item[$clave] = $valor;
+                    // En caso contrario, registra el error y sale del bucle
+                    else {
+                        $claveInexistente = true;
+                        break;
+                    }
+                }
+                
+                break;
+            }
+        }
+
+        // Si lo ha encontrad
         if ($encontrado !== false) {
 
-            $claveInexistente = false;
-            
-            foreach($data as $clave => $valor) {
-                // Si existe la clave, actualiza el valor en jsonData
-                if (array_key_exists($clave, $this->jsonData[$encontrado]))
-                    $this->jsonData[$encontrado][$clave] = $valor;
-                // En caso contrario, registra el error y sale del bucle
-                else {
-                    $claveInexistente = true;
-                    break;
-                }
-            }
-
             if (!$claveInexistente) {
+                
                 // Escribe los datos actualizados en el fichero
-                $fp = fopen(PATH_JSON, 'w');
-                $resultado = fwrite($fp, json_encode($this->jsonData, JSON_PRETTY_PRINT));
-                fclose($fp);
+                try {
+                    $fp = fopen(PATH_JSON, 'w');
+                    $resultado = fwrite($fp, json_encode($this->jsonData, JSON_PRETTY_PRINT));
 
-                if ($resultado) {
-                    http_response_code(204);
-                    $res = ['status' => 'No Content', 'code' => '204', 'response' => 'Contenido actualizado'];
-                    echo json_encode($res);
-                } else {
+                    if ($resultado) {
+                        http_response_code(204);
+                        $res = ['status' => 'No Content', 'code' => '204', 'response' => 'Contenido actualizado'];
+                        echo json_encode($res);
+                    }
+
+                } catch (Exception $e) {
+
                     http_response_code(500);
-                    $res = ['status' => 'Internal Server Error', 'code' => '500', 'response' => 'No se puedo completar la operación'];
+                    $res = ['status' => 'Internal Server Error', 'code' => '500', 'response' => 'No se pudo completar la operación: ' . $e->getMessage()];
                     echo json_encode($res);
+
+                } finally {
+                    if ($fp) fclose($fp);
                 }
+
             // Alguna clave no existia
             } else {
                 http_response_code(400);

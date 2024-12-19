@@ -1,8 +1,8 @@
 <?php
 
+require '../config/config.php';
 require '../core/Router.php';
 require '../app/controllers/Item.php';
-require '../config/config.php';
 require '../app/models/ItemModel.php';
 
 $url = $_SERVER['QUERY_STRING'];

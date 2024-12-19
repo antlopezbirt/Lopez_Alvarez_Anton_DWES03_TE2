@@ -1,0 +1,257 @@
+{
+    "info": {
+        "_postman_id": "d4b23d06-0853-4207-ad92-219af6ca70f5",
+        "name": "DWES03 ",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "GET - All items",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost/lopez_alvarez_anton_DWES03_TE2/api/v1/public/items",
+                    "path": [
+                        "lopez_alvarez_anton_DWES03_TE2",
+                        "api",
+                        "v1",
+                        "public",
+                        "items"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "GET - Item by ID",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost/lopez_alvarez_anton_DWES03_TE2/api/v1/public/item/113",
+                    "path": [
+                        "lopez_alvarez_anton_DWES03_TE2",
+                        "api",
+                        "v1",
+                        "public",
+                        "item",
+                        "113"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "GET - Items by Artist",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost/lopez_alvarez_anton_DWES03_TE2/api/v1/public/items/artist/ZZTop",
+                    "path": [
+                        "lopez_alvarez_anton_DWES03_TE2",
+                        "api",
+                        "v1",
+                        "public",
+                        "items",
+                        "artist",
+                        "ZZTop"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "GET - Items by Format",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost/lopez_alvarez_anton_DWES03_TE2/api/v1/public/items/format/CD",
+                    "path": [
+                        "lopez_alvarez_anton_DWES03_TE2",
+                        "api",
+                        "v1",
+                        "public",
+                        "items",
+                        "format",
+                        "CD"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "GET - Items order by key, asc|desc",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost/lopez_alvarez_anton_DWES03_TE2/api/v1/public/items/order/rating/asc",
+                    "path": [
+                        "lopez_alvarez_anton_DWES03_TE2",
+                        "api",
+                        "v1",
+                        "public",
+                        "items",
+                        "order",
+                        "rating",
+                        "asc"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "POST - Item create",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost/lopez_alvarez_anton_DWES03_TE2/api/v1/public/item/create",
+                    "path": [
+                        "lopez_alvarez_anton_DWES03_TE2",
+                        "api",
+                        "v1",
+                        "public",
+                        "item",
+                        "create"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"title\":\"Through the Looking Glass\",\n  \"artist\":\"Midori Takada\",\n  \"format\":\"CD\",\n  \"year\":\"2017\",\n  \"origYear\":\"1983\",\n  \"label\":\"WRWTFWW Records\",\n  \"rating\":\"9\",\n  \"comment\":\"Reedición suiza con descarga digital. Muy bueno.\",\n  \"buyPrice\":\"20\",\n  \"condition\":\"NM\",\n  \"sellPrice\":\"28\",\n  \"externalIds\":{\n    \"discogs\":\"9975883\",\n    \"musicbrainz\":\"76dccf5b-c8b0-44b1-93a8-fb739a066bc4\"\n  }\n}"
+                }
+            }
+        },
+        {
+            "name": "PUT - Update Item",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost/lopez_alvarez_anton_DWES03_TE2/api/v1/public/item/update/114",
+                    "path": [
+                        "lopez_alvarez_anton_DWES03_TE2",
+                        "api",
+                        "v1",
+                        "public",
+                        "item",
+                        "update",
+                        "114"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"format\": \"LP\",\n  \"year\": \"2020\"\n}"
+                }
+            }
+        },
+        {
+            "name": "DELETE - Delete Item",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost/lopez_alvarez_anton_DWES03_TE2/api/v1/public/item/delete/113",
+                    "path": [
+                        "lopez_alvarez_anton_DWES03_TE2",
+                        "api",
+                        "v1",
+                        "public",
+                        "item",
+                        "delete",
+                        "113"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "ERROR - 404",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost/DWES/DWES03/TE02/tarea/api/v1/public/error404",
+                    "path": [
+                        "DWES",
+                        "DWES03",
+                        "TE02",
+                        "tarea",
+                        "api",
+                        "v1",
+                        "public",
+                        "error404"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                }
+            }
+        },
+        {
+            "name": " ERROR - 400",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost/DWES/DWES03/TE02/tarea/api/v1/public/item/create",
+                    "path": [
+                        "DWES",
+                        "DWES03",
+                        "TE02",
+                        "tarea",
+                        "api",
+                        "v1",
+                        "public",
+                        "item",
+                        "create"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ]
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "[\n  {\n    \"title\":\"Through the Looking Glass\",\n    \"artist\":\"Midori Takada\",\n    \"format\":\"CD\",\n    \"year\":\"2017\",\n    \"origYear\":\"1983\",\n    \"label\":\"WRWTFWW Records\",\n    \"score\":\"9\",\n    \"comment\":\"Reedición suiza con descarga digital. Muy bueno.\",\n    \"buyPrice\":\"20\",\n    \"condition\":\"NM\",\n    \"sellPrice\":\"28\",\n    \"externalIds\":{\n      \"discogs\":\"9975883\",\n      \"musicbrainz\":\"76dccf5b-c8b0-44b1-93a8-fb739a066bc4\"\n    }\n  },\n  {\n    \"title\":\"Hundred Rabbits\",\n    \"artist\":\"Aliceffekt\",\n    \"format\":\"Digital\",\n    \"year\":\"2016\",\n    \"origYear\":\"2016\",\n    \"label\":\"Self-release\",\n    \"score\":\"8\",\n    \"comment\":\"Excelente ambient de este artista canadiense\",\n    \"buyPrice\":\"5\",\n    \"condition\":\"M\",\n    \"sellPrice\":\"\",\n    \"externalIds\":{\n      \"musicbrainz\":\"934d627a-97ca-4fdd-ad2b-9f08c5ec6412\"\n    }\n  }\n]"
+                }
+            }
+        }
+    ]
+}
