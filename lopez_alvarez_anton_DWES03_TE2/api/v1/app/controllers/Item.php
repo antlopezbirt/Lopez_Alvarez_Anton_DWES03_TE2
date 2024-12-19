@@ -25,8 +25,8 @@ class Item {
         }
 
         // Responde con todos los items serializados (mediante jsonSerialize)
-        $res = ['status' => 'OK', 'code' => '200', 'response' => $arrayItems];
-        echo json_encode($res);
+        $res = new Response(200, $arrayItems);
+        $res->enviar();
     }
     
     // Devuelve el Item que se corresponda con el ID recibido, o un 404 si no existe
@@ -44,17 +44,16 @@ class Item {
                 $item['sellPrice'], $item['externalIds']);
             
                 // Responde con el Item serializado
-                $res = ['status' => 'OK', 'code' => '200', 'response' => $item];
-                echo json_encode($res);
+                $res = new Response(200, $item);
+                $res->enviar();
 
                 return true;
             }
         }
 
         // Si llega aquí es que no ha encontrado el item, devuelve un 404
-        http_response_code(404);
-        $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Item no encontrado'];
-        echo json_encode($res);
+        $res = new Response(404, 'Item no encontrado');
+        $res->enviar();
     }
     
     // Devuelve todos los Items cuyo artista sea el recibido, o un 404 si no se encuentra ninguno
@@ -69,7 +68,7 @@ class Item {
         // Recorre el JSON en busca del item
         foreach ($this->jsonData as $item) {
             // Acumula en el array los Items de ese artista
-            if ($item['artist'] === $artist) {
+            if (strtolower($item['artist']) === strtolower($artist)) {
                 $arrayItems[] = new ItemModel($item['id'], $item['title'], 
                 $item['artist'], $item['format'], $item['year'], 
                 $item['origYear'], $item['label'], $item['rating'],
@@ -80,14 +79,13 @@ class Item {
 
         // Si ha encontrado alguno, responde con los items serializados (jsonSerialize)
         if (count($arrayItems) > 0) {
-            $res = ['status' => 'OK', 'code' => '200', 'response' => $arrayItems];
-            echo json_encode($res);
+            $res = new Response(200, $arrayItems);
+            $res->enviar();
 
         // En caso contrario un 404
         } else {
-            http_response_code(404);
-            $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Artista no encontrado'];
-            echo json_encode($res);
+            $res = new Response(404, 'Artista no encontrado');
+            $res->enviar();
         }
     }
     
@@ -100,7 +98,7 @@ class Item {
         foreach ($this->jsonData as $item) {
 
             // Acumula en el array los Items de ese artista
-            if ($item['format'] === $format) {
+            if (strtolower($item['format']) === strtolower($format)) {
                 $arrayItems[] = new ItemModel($item['id'], $item['title'], 
                 $item['artist'], $item['format'], $item['year'], 
                 $item['origYear'], $item['label'], $item['rating'],
@@ -111,14 +109,13 @@ class Item {
 
         // Si ha encontrado alguno, responde con los items serializados (jsonSerialize)
         if (count($arrayItems) > 0) {
-            $res = ['status' => 'OK', 'code' => '200', 'response' => $arrayItems];
-            echo json_encode($res);
+            $res = new Response(200, $arrayItems);
+            $res->enviar();
 
         // En caso contrario un 404
         } else {
-            http_response_code(404);
-            $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Formato no encontrado'];
-            echo json_encode($res);
+            $res = new Response(404, 'Formato no encontrado');
+            $res->enviar();
         }
     }
     
@@ -144,16 +141,14 @@ class Item {
                     $item['sellPrice'], $item['externalIds']);
             }
 
-            // Responde con todos los items serializados (mediante jsonSerialize)
-            http_response_code(200);
-            $res = ['status' => 'OK', 'code' => '200', 'response' => $arrayItems];
-            echo json_encode($res);
+            // Responde con todos los items serializados
+            $res = new Response(200, $arrayItems);
+            $res->enviar();
 
+        // Devuelve un 400, la clave no existe
         } else {
-            // Devuelve un 400, la clave para ordenar no existe
-            http_response_code(400);
-            $res = ['status' => 'OK', 'code' => '400', 'response' => 'La clave para ordenar no existe.'];
-            echo json_encode($res);
+            $res = new Response(400, 'La clave para ordenar no existe.');
+            $res->enviar();
         }
     }
     
@@ -172,7 +167,7 @@ class Item {
                 $nuevoId++;
     
                 try {
-                    // Intenta generar el nuevo Item a partir de los datos y el nuevo ID
+                    // Intenta instanciar el nuevo Item a partir de los datos y el nuevo ID
                     $nuevoItem = new ItemModel($nuevoId, $data['title'], 
                         $data['artist'], $data['format'], $data['year'], 
                         $data['origYear'], $data['label'], $data['rating'],
@@ -188,40 +183,35 @@ class Item {
                         $resultado = fwrite($fp, json_encode($this->jsonData, JSON_PRETTY_PRINT));
     
                         if ($resultado) {
-                            http_response_code(201);
-                            $res = ['status' => 'Created', 'code' => '201', 'response' => $nuevoItem];
-                            echo json_encode($res);
+                            $res = new Response(201, $nuevoItem);
+                            $res->enviar();
                         }
-    
+                    // No se ha podido escribir en el fichero
                     } catch (Exception $e) {
-    
-                        http_response_code(500);
-                        $res = ['status' => 'Internal Server Error', 'code' => '500', 'response' => 'No se pudo guardar la operación: ' . $e->getMessage()];
-                        echo json_encode($res);
-    
+                        $res = new Response(500, 'No se pudo guardar el ítem: ' . $e->getMessage());
+                        $res->enviar();  
+
+                    // En cualquier caso, cierra el puntero.
                     } finally {
                         if ($fp) fclose($fp);
                     }
-    
+
+                // El ítem recibido no tienen buen formato internamente
                 } catch (Exception $e) {
-                    http_response_code(400);
-                    $res = ['status' => 'Internal Server Error', 'code' => '400', 'Error de formato al crear el Item: ' . $e->getMessage()];
-                    echo json_encode($res);
+                    $res = new Response(400, 'Error de formato en los datos recibidos.');
+                    $res->enviar();
                 }
-    
-    
+
             // Ha llegado más de una entrada (o ninguna)
             } else {
-                http_response_code(400);
-                $res = ['status' => 'Bad Request', 'code' => '400', 'response' => 'Solo se admite un Item. (Recibidos: ' . count($data) . ')'];
-                echo json_encode($res);
+                $res = new Response(400, 'Solo se puede crear un ítem. (Recibidos: ' . count($data) . ')');
+                $res->enviar();
             }
 
-        // Los datos recibidos no tienen el formato correcto
+        // Los datos recibidos no tienen formato válido
         } catch (Error $e) {
-            http_response_code(400);
-            $res = ['status' => 'Bad Request', 'code' => '400', 'response' => 'Formato inválido'];
-            echo json_encode($res);
+            $res = new Response(400, 'Formato no válido');
+            $res->enviar();
         }
     }
     
@@ -238,8 +228,12 @@ class Item {
                 // Si lo encuentra, trata de actualizarlo
                 foreach($data as $clave => $valor) {
                     // Si existe la clave, actualiza el valor en jsonData
-                    if (array_key_exists($clave, $item))
+                    if (array_key_exists($clave, $item)) {
                         $item[$clave] = $valor;
+                    }
+                        
+
+
                     // En caso contrario, registra el error y sale del bucle
                     else {
                         $claveInexistente = true;
@@ -263,14 +257,14 @@ class Item {
 
                     if ($resultado) {
                         http_response_code(204);
-                        $res = ['status' => 'No Content', 'code' => '204', 'response' => 'Contenido actualizado'];
+                        $res = ['status' => 'No Content', 'code' => '204', 'response' => 'Ítem actualizado'];
                         echo json_encode($res);
                     }
 
                 } catch (Exception $e) {
 
                     http_response_code(500);
-                    $res = ['status' => 'Internal Server Error', 'code' => '500', 'response' => 'No se pudo completar la operación: ' . $e->getMessage()];
+                    $res = ['status' => 'Internal Server Error', 'code' => '500', 'response' => 'No se pudo guardar la actualización: ' . $e->getMessage()];
                     echo json_encode($res);
 
                 } finally {
@@ -286,7 +280,7 @@ class Item {
 
         } else {
             http_response_code(404);
-            $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Item no encontrado (' . $id . ')'];
+            $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Ítem no encontrado (' . $id . ')'];
             echo json_encode($res);
         }
     }
@@ -319,7 +313,7 @@ class Item {
         // Si no encuentra el Item a eliminar, responde con un 404
         } else {
             http_response_code(404);
-            $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Item no encontrado (' . $id . ')'];
+            $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'Ítem no encontrado (' . $id . ')'];
             echo json_encode($res);
         }
     }

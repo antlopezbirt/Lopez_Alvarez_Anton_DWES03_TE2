@@ -4,17 +4,12 @@ require '../config/config.php';
 require '../core/Router.php';
 require '../app/controllers/Item.php';
 require '../app/models/ItemModel.php';
+require '../app/helpers/Response.php';
 
 $url = $_SERVER['QUERY_STRING'];
 //echo 'QUERY_STRING = ' . $url . '<br>';
 
 $router = new Router();
-
-$router->add('', array(
-    'controller'=>'Home',
-    'action'=>'index'
-    )
-);
 
 // Rutas GET
 
@@ -144,7 +139,7 @@ if ($router->matchRoutes($urlArray)) {
         echo "El método no existe";
     }
 } else {
-    //echo "No se encontró ruta para esa URL.";
+    // En caso de que no se haga match, se devuelve un 404.
 
     http_response_code(404);
     $res = ['status' => 'Not Found', 'code' => '404', 'response' => 'No se encontró ruta para esa URL: ' . $url];
