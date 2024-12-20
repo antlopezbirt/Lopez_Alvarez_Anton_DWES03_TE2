@@ -122,16 +122,26 @@ if ($router->matchRoutes($urlArray)) {
     
     $controller = $router->getParams()['controller'];
     $action = $router->getParams()['action'];
-    
-    $controller = new $controller();
-    
-    if (method_exists($controller, $action)) {
-        $resp = call_user_func_array([$controller, $action], $params);
-    } else {
-        echo "El método no existe";
+
+    try {
+        $controller = new $controller();
+
+        if (method_exists($controller, $action)) {
+            $resp = call_user_func_array([$controller, $action], $params);
+        } else {
+            // Si el método no existe, se envía un error 500 con ese mensaje.
+            $res = new Response(500, 'Error en el servidor', 'El método no existe');
+            $res->enviar();
+        }
+
+    } catch (Exception $e) {
+        // En caso de que no se produzca una excepción se devuelve un error 500 con el mensaje.
+        $res = new Response(500, 'Error en el servidor', $e->getMessage());
+        $res->enviar();
     }
+
 } else {
     // En caso de que no se haga match, se devuelve un 404.
-    $res = new Response(404, 'No se encontró ruta para esa URL: ' . $url);
+    $res = new Response(404, 'Enrutamiento', 'ERROR: No se encontró ruta para esa URL: ' . $url);
     $res->enviar();
 }

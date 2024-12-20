@@ -5,11 +5,17 @@ class JSONFileutil {
     private $jsonFile;
     private $jsonString;
     private $jsonDataArray;
+    private bool $ficheroValido;
 
     public function __construct($ruta) {
         $this->jsonFile = $ruta;
-        $this->jsonString = file_get_contents($this->jsonFile);
+        $this->jsonString = @file_get_contents($this->jsonFile);
         $this->jsonDataArray = json_decode($this->jsonString, true);
+
+        // Si hay algún problema con el fichero, lanza excepciones que llegarán en una respuesta por la API
+        if ($this->jsonString === false) throw new Exception('ERROR: El fichero no existe');
+        if ($this->jsonDataArray === null) throw new Exception('ERROR: Fichero JSON corrupto');
+
     }
 
     public function getJsonFile() {
@@ -22,6 +28,10 @@ class JSONFileutil {
 
     public function getJsonDataArray() {
         return $this->jsonDataArray;
+    }
+
+    public function esValido() {
+        return $this->ficheroValido;
     }
 
     // Intenta guardar los datos actualizados en el fichero

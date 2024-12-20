@@ -5,9 +5,10 @@ class Response {
     private $status;
     private $code; // El código de la cabecera
     private $respCode; // El código que se muestra en la respuesta
+    private $description; // La descripción de la operación
     private $response;
 
-    public function __construct($code, $response) {
+    public function __construct($code, $description, $response) {
 
         // Para los códigos 204, por cabecera se pasa un 200 para que llegue el body
         if ($code != 204) {
@@ -17,7 +18,7 @@ class Response {
         }
 
         $this->respCode = $code;
-        
+        $this->description = $description;
         $this->response = $response;
 
         // El status según el código
@@ -58,8 +59,11 @@ class Response {
         // La respuesta siempre es un JSON
         header('Content-Type: application/json');
 
-        // Imprime el mensaje en el body de la respuesta
-        $res = ['status' => $this->status, 'code' => $this->respCode, 'response' => $this->response];
+        // Genera el cuerpo de la respuesta
+        $res = ['status' => $this->status, 'code' => $this->respCode, 
+                'description' => $this->description, 'response' => $this->response];
+
+        // Imprime el cuerpo generado
         echo json_encode($res);
     }
 }
