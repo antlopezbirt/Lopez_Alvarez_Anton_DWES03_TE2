@@ -11,8 +11,7 @@ $url = $_SERVER['QUERY_STRING'];
 
 // Si la query contiene espacios no es válida, devolvemos el error
 if (str_contains(urldecode($url), ' ')) {
-    $res = new Response(403, 'URL no válida', 'ERROR: La URL no puede contener espacios: ' . urldecode($url));
-    $res->enviar();
+    (new Response(403, 'URL no válida', 'ERROR: La URL no puede contener espacios: ' . urldecode($url)))->enviar();
 
     die();
 }
@@ -106,9 +105,9 @@ if (!empty($urlParams[1])) {
         $urlArray['action'] = 'index';
     }
 } else {
-    // En caso de que no haya controlador, se devuelve un 404.
-    $res = new Response(404, 'No se encontró ruta para esa URL: ' . $url);
-    $res->enviar();
+    // En caso de que no haber recibido un controlador, se devuelve un 404.
+    (new Response(404, 'Controlador no recibido', 'ERROR: No se encontró un controlador en la URL: ' . $url))->enviar();
+    die();
 }
 
 
@@ -143,18 +142,15 @@ if ($router->matchRoutes($urlArray)) {
 
         } else {
             // Si el controlador o el método no existen, se envía un error 500 con ese mensaje.
-            $res = new Response(500, 'Controlador o método no definidos', 'El controlador o el método no son válidos');
-            $res->enviar();
+            (new Response(500, 'Controlador o método no definidos', 'ERROR: El controlador o el método no son válidos'))->enviar();
         }
 
     } catch (Exception $e) {
         // En caso de que no se produzca una excepción se devuelve un error 500 con el mensaje.
-        $res = new Response(500, 'Error en el servidor', $e->getMessage());
-        $res->enviar();
+        (new Response(500, 'Error en el servidor', $e->getMessage()))->enviar();
     }
 
 } else {
     // En caso de que no se haga match, se devuelve un 404.
-    $res = new Response(404, 'Enrutamiento', 'ERROR: No se encontró ruta para esa URL: ' . $url);
-    $res->enviar();
+    (new Response(404, 'Ruta no encontrada', 'ERROR: No se encontró ruta para esa URL: ' . $url))->enviar();
 }

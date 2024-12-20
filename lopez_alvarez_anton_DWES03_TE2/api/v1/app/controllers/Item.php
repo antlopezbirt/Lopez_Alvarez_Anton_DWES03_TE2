@@ -27,8 +27,8 @@ class Item {
         }
 
         // Responde con todos los items serializados (mediante jsonSerialize)
-        $res = new Response(200, $descripcion, $arrayItems);
-        $res->enviar();        
+        (new Response(200, $descripcion, $arrayItems))->enviar();
+        return true;
     }
     
     // Devuelve el Item que se corresponda con el ID recibido, o un 404 si no existe
@@ -48,16 +48,15 @@ class Item {
                 $item['sellPrice'], $item['externalIds']);
             
                 // Responde con el Item serializado
-                $res = new Response(200, $descripcion, $item);
-                $res->enviar();
+                (new Response(200, $descripcion, $item))->enviar();
 
                 return true;
             }
         }
 
         // Si llega aquí es que no ha encontrado el item, devuelve un 404
-        $res = new Response(404, $descripcion, 'ERROR: Ítem no encontrado');
-        $res->enviar();
+        (new Response(404, $descripcion, 'ERROR: Ítem no encontrado'))->enviar();
+        return false;
     }
     
     // Devuelve todos los ítems cuyo artista sea el recibido, o un 404 si no se encuentra ninguno
@@ -85,13 +84,13 @@ class Item {
 
         // Si ha encontrado alguno, responde con los items serializados (jsonSerialize)
         if (count($arrayItems) > 0) {
-            $res = new Response(200, $descripcion, $arrayItems);
-            $res->enviar();
+            (new Response(200, $descripcion, $arrayItems))->enviar();
+            return true;
 
         // En caso contrario un 404
         } else {
-            $res = new Response(404, $descripcion, 'ERROR: Artista no encontrado (' . $artist . ')');
-            $res->enviar();
+            (new Response(404, $descripcion, 'ERROR: Artista no encontrado (' . $artist . ')'))->enviar();
+            return false;
         }
     }
     
@@ -118,13 +117,13 @@ class Item {
 
         // Si ha encontrado alguno, responde con los items serializados (jsonSerialize)
         if (count($arrayItems) > 0) {
-            $res = new Response(200, $descripcion, $arrayItems);
-            $res->enviar();
+            (new Response(200, $descripcion, $arrayItems))->enviar();
+            return true;
 
         // En caso contrario un 404
         } else {
-            $res = new Response(404, $descripcion, 'ERROR: Formato no encontrado (' . $format . ')');
-            $res->enviar();
+            (new Response(404, $descripcion, 'ERROR: Formato no encontrado (' . $format . ')'))->enviar();
+            return false;
         }
     }
     
@@ -140,8 +139,7 @@ class Item {
 
             if ($key === 'externalIds') {
                 // Responde con todos los items serializados
-                $res = new Response(400, $descripcion, 'ERROR: No se puede ordenar por externalIds al ser un array');
-                $res->enviar();
+                (new Response(400, $descripcion, 'ERROR: No se puede ordenar por externalIds al ser un array'))->enviar();
 
                 return false;
             }
@@ -164,13 +162,13 @@ class Item {
             }
 
             // Responde con todos los items serializados
-            $res = new Response(200, $descripcion, $arrayItems);
-            $res->enviar();
+            (new Response(200, $descripcion, $arrayItems))->enviar();
+            return true;
 
         // Devuelve un 400, la clave no existe
         } else {
-            $res = new Response(400, $descripcion, 'ERROR: La clave para ordenar no existe (' . $key . ').');
-            $res->enviar();
+            (new Response(400, $descripcion, 'ERROR: La clave para ordenar no existe (' . $key . ').'))->enviar();
+            return false;
         }
     }
     
@@ -184,8 +182,7 @@ class Item {
 
         // Si no llegan datos se considera que no son válidos
         if ($data === null) {
-            $res = new Response(400, $descripcion, 'ERROR: Formato no válido de los datos recibidos');
-            $res->enviar();
+            (new Response(400, $descripcion, 'ERROR: Formato no válido de los datos recibidos'))->enviar();
 
             return false;
         }
@@ -198,8 +195,7 @@ class Item {
                 
                 $textoRespuesta = $this->chequearValores($data);
 
-                $res = new Response(400, $descripcion, $textoRespuesta);
-                $res->enviar();
+                (new Response(400, $descripcion, $textoRespuesta))->enviar();
                 return false;
             }
 
@@ -225,23 +221,23 @@ class Item {
 
                 // Guarda los datos en el fichero
                 if ($this->ficheroJson->guardarDatos($this->jsonData)) {
-                    $res = new Response(201, $descripcion, $nuevoItem);
-                    $res->enviar();
+                    (new Response(201, $descripcion, $nuevoItem))->enviar();
+                    return true;
                 } else {
-                    $res = new Response(500, $descripcion, 'ERROR: No se pudo guardar el ítem.');
-                    $res->enviar();  
+                    (new Response(500, $descripcion, 'ERROR: No se pudo guardar el ítem.'))->enviar();
+                    return false;
                 }
 
             // El ítem recibido no tiene buen formato internamente
             } catch (Error $e) {
-                $res = new Response(400, $descripcion, 'ERROR: Formato incorrecto del ítem recibido.');
-                $res->enviar();
+                (new Response(400, $descripcion, 'ERROR: Formato incorrecto del ítem recibido.'))->enviar();
+                return false;
             }
 
         // Ha llegado más o menos de una entrada
         } else {
-            $res = new Response(400, $descripcion, 'ERROR: Solo se puede crear un ítem. (Recibidos: ' . count($data) . ')');
-            $res->enviar();
+            (new Response(400, $descripcion, 'ERROR: Solo se puede crear un ítem. (Recibidos: ' . count($data) . ')'))->enviar();
+            return false;
         }
     }
     
@@ -252,8 +248,7 @@ class Item {
 
         // Si no llegan datos se considera que no son válidos
         if ($data === null) {
-            $res = new Response(400, $descripcion, 'ERROR: Formato no válido de los datos recibidos');
-            $res->enviar();
+            (new Response(400, $descripcion, 'ERROR: Formato no válido de los datos recibidos'))->enviar();
 
             return false;
         }
@@ -263,8 +258,7 @@ class Item {
                 
             $textoRespuesta = $this->chequearValores($data);
 
-            $res = new Response(400, $descripcion, $textoRespuesta);
-            $res->enviar();
+            (new Response(400, $descripcion, $textoRespuesta))->enviar();
             return false;
         }
 
@@ -288,8 +282,7 @@ class Item {
 
                         // Se permite actualizar cualquier dato excepto el ID
                         if ($clave === 'id') {
-                            $res = new Response(400, $descripcion, 'ERROR: No es posible actualizar el ID');
-                            $res->enviar();
+                            (new Response(400, $descripcion, 'ERROR: No es posible actualizar el ID'))->enviar();
 
                             return false;
                         }
@@ -303,8 +296,7 @@ class Item {
                     
                     // En caso contrario, responde con el fallo y sale del bucle
                     } else {
-                        $res = new Response(400, $descripcion, 'ERROR: Clave inexistente en los datos recibidos (' . $clave . ')');
-                        $res->enviar();
+                        (new Response(400, $descripcion, 'ERROR: Clave inexistente en los datos recibidos (' . $clave . ')'))->enviar();
 
                         return false;
                     }
@@ -317,21 +309,19 @@ class Item {
                 if ($this->ficheroJson->guardarDatos($this->jsonData)) {
 
                     // En caso de éxito devuelve un 204 (cabecera 200) y el ítem actualizado
-                    $res = new Response(204, $descripcion, $itemActualizar);
-                    $res->enviar();
+                    (new Response(204, $descripcion, $itemActualizar))->enviar();
                     return true;
 
                 } else {
-                    $res = new Response(500, $descripcion, 'ERROR: No se pudo guardar la actualización.');
-                    $res->enviar();
+                    (new Response(500, $descripcion, 'ERROR: No se pudo guardar la actualización.'))->enviar();
                     return false;
                 }
             }
         }
 
         // Si llega aquí es que no ha encontrado el ítem. Devuelve un 404
-        $res = new Response(404, $descripcion, 'ERROR: Ítem no encontrado (' . $id . ')');
-        $res->enviar();
+        (new Response(404, $descripcion, 'ERROR: Ítem no encontrado (' . $id . ')'))->enviar();
+        return false;
     }
     
     // Elimina el ítem a partir de su ID
@@ -351,13 +341,11 @@ class Item {
                 // Escribe los datos actualizados en el fichero
                 if ($this->ficheroJson->guardarDatos($this->jsonData)) {
                     // En caso de éxito devuelve un 204 (cabecera 200) y el ítem eliminado
-                    $res = new Response(204, $descripcion, $item);
-                    $res->enviar();
+                    (new Response(204, $descripcion, $item))->enviar();
 
                     return true;
                 } else {
-                    $res = new Response(500, $descripcion, 'ERROR: No se pudo guardar la actualización');
-                    $res->enviar();
+                    (new Response(500, $descripcion, 'ERROR: No se pudo guardar la actualización'))->enviar();
 
                     return false;
                 }
@@ -365,8 +353,8 @@ class Item {
         }
 
         // Si llega aquí es que no ha encontrado el item, devuelve un 404
-        $res = new Response(404, $descripcion, 'ERROR: Ítem no encontrado (' . $id . ')');
-        $res->enviar();
+        (new Response(404, $descripcion, 'ERROR: Ítem no encontrado (' . $id . ')'))->enviar();
+        return false;
     }
 
     // Comprueba que los valores recibidos cumplan los requisitos, si no genera el mensaje que se enviará en la respuesta HTTP

@@ -170,6 +170,5 @@ class ItemModel implements JsonSerializable {
                 'comment' => $this->comment, 'buyPrice' => $this->buyPrice, 
                 'condition' => $this->condition, 'sellPrice' => $this->sellPrice, 
                 'externalIds' => $this->externalIds];
-        
     }
 }
