@@ -170,7 +170,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"format\": \"LP\",\n  \"year\": \"2020\"\n}",
+					"raw": "{\n    \"format\": \"2CD\",\n    \"year\": 2020,\n    \"origYear\": 1985\n}",
 					"options": {
 						"raw": {
 							"language": "json"
