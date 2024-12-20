@@ -1,5 +1,5 @@
-{
-    "0": {
+[
+    {
         "id": 100,
         "title": "Tommy",
         "artist": "The Who",
@@ -17,7 +17,7 @@
             "musicbrainz": "4147c0d3-7939-3484-bde6-b6fbefd7bc3b"
         }
     },
-    "1": {
+    {
         "id": 101,
         "title": "Leave Home",
         "artist": "Ramones",
@@ -35,7 +35,7 @@
             "musicbrainz": "c5923e07-a09b-469a-af1a-bc5e67e402ec"
         }
     },
-    "2": {
+    {
         "id": 102,
         "title": "Killing Joke",
         "artist": "Killing Joke",
@@ -53,7 +53,7 @@
             "musicbrainz": "0f6924c2-5812-36d8-8a34-df69744ce5e0"
         }
     },
-    "3": {
+    {
         "id": 103,
         "title": "Heaven or Las Vegas",
         "artist": "Cocteau Twins",
@@ -71,7 +71,7 @@
             "musicbrainz": "224445b7-35ea-43c2-b8df-0e918292f5ba"
         }
     },
-    "4": {
+    {
         "id": 104,
         "title": "Quadrophenia",
         "artist": "The Who",
@@ -89,7 +89,7 @@
             "musicbrainz": "e0e2c19a-d9a9-3b59-b69b-6afc14551599"
         }
     },
-    "5": {
+    {
         "id": 105,
         "title": "Das Hohelied Salomos",
         "artist": "Popol Vuh",
@@ -107,7 +107,7 @@
             "musicbrainz": "5bcde2f7-80ac-38fa-994b-ce51df4d50e3"
         }
     },
-    "6": {
+    {
         "id": 106,
         "title": "Hosianna Mantra",
         "artist": "Popol Vuh",
@@ -125,7 +125,7 @@
             "musicbrainz": "e4efe882-c8b6-45c1-a429-fb7f350225f9"
         }
     },
-    "7": {
+    {
         "id": 107,
         "title": "Short Stories in Impossible Spaces",
         "artist": "Aliceffekt",
@@ -142,7 +142,7 @@
             "musicbrainz": "681ad693-9074-4216-aded-d1babfede242"
         }
     },
-    "8": {
+    {
         "id": 108,
         "title": "Who\u2019s Next",
         "artist": "The Who",
@@ -160,7 +160,7 @@
             "musicbrainz": "48289c07-fb4c-3c7a-b185-fd800e822325"
         }
     },
-    "9": {
+    {
         "id": 109,
         "title": "Bizarre Love Triangle",
         "artist": "New Order",
@@ -178,7 +178,7 @@
             "musicbrainz": "de53b49d-be39-4daf-afe2-d650269862d7"
         }
     },
-    "10": {
+    {
         "id": 110,
         "title": "Ella tiene el cabello rubio",
         "artist": "Albert Band",
@@ -195,7 +195,7 @@
             "discogs": "3374017"
         }
     },
-    "11": {
+    {
         "id": 111,
         "title": "Rocket to Russia",
         "artist": "Ramones",
@@ -213,7 +213,7 @@
             "musicbrainz": "f018af26-cf5e-4c76-93f0-c5faa80fd371"
         }
     },
-    "12": {
+    {
         "id": 112,
         "title": "Ramones Mania",
         "artist": "Ramones",
@@ -230,23 +230,5 @@
             "discogs": "651058",
             "musicbrainz": "2defbea3-6f9d-43f1-bac7-fdd196cf65a7"
         }
-    },
-    "14": {
-        "id": 114,
-        "title": "Through the Looking Glass",
-        "artist": "Midori Takada",
-        "format": "CD",
-        "year": 2017,
-        "origYear": 1983,
-        "label": "WRWTFWW Records",
-        "rating": 9,
-        "comment": "Reedici\u00f3n suiza con descarga digital. Muy bueno.",
-        "buyPrice": 20,
-        "condition": "NM",
-        "sellPrice": 28,
-        "externalIds": {
-            "discogs": "9975883",
-            "musicbrainz": "76dccf5b-c8b0-44b1-93a8-fb739a066bc4"
-        }
     }
-}
+]
