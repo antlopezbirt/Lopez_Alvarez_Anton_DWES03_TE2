@@ -19,10 +19,10 @@ class ItemModel implements JsonSerializable {
     private array $externalIds;
     
     // Constructora de la clase
-    // externalIds podrá llegar vacío, si el item no tiene ningún ID de servicios externos.
+    // sellPrice y externalIds podrán llegar vacíos, se les asigna un valor 0 o array vacío por defecto
     public function __construct(int $id, string $title, string $artist, 
         string $format, int $year, int $origYear, string $label, int $rating,
-        string $comment, float $buyPrice, string $condition, float $sellPrice,
+        string $comment, float $buyPrice, string $condition, float $sellPrice=0,
         array $externalIds=[]) {
 
         $this->id = $id;

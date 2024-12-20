@@ -308,5 +308,35 @@
         "condition": "NM",
         "sellPrice": 28,
         "externalIds": []
+    },
+    {
+        "id": 118,
+        "title": "Through the Looking Glass",
+        "artist": "Midori Takada",
+        "format": "CD",
+        "year": 2017,
+        "origYear": 1983,
+        "label": "WRWTFWW Records",
+        "rating": 9,
+        "comment": "Reedici\u00f3n suiza con descarga digital. Muy bueno.",
+        "buyPrice": 20,
+        "condition": "NM",
+        "sellPrice": 0,
+        "externalIds": []
+    },
+    {
+        "id": 119,
+        "title": "Through the Looking Glass",
+        "artist": "Midori Takada",
+        "format": "CD",
+        "year": 2017,
+        "origYear": 1983,
+        "label": "WRWTFWW Records",
+        "rating": 9,
+        "comment": "Reedici\u00f3n suiza con descarga digital. Muy bueno.",
+        "buyPrice": 20,
+        "condition": "NM",
+        "sellPrice": 0,
+        "externalIds": []
     }
 ]

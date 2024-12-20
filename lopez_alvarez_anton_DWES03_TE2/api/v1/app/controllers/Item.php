@@ -206,13 +206,11 @@ class Item {
                 @$nuevoItem = new ItemModel($nuevoId, $data['title'], 
                     $data['artist'], $data['format'], $data['year'], 
                     $data['origYear'], $data['label'], $data['rating'],
-                    $data['comment'], $data['buyPrice'], $data['condition'], 
-                    $data['sellPrice']);
+                    $data['comment'], $data['buyPrice'], $data['condition']);
 
-                // Si llega con externalIds, los seteamos, si no el objeto le asignará un array vacío por defecto.
-                if (array_key_exists('externalIds', $data)) {
-                    $nuevoItem->setExternalIds($data['externalIds']);
-                }
+                // Si llega con sellPrice o externalIds, los seteamos, si no el objeto les asignará valores por defecto.
+                if (array_key_exists('sellPrice', $data) && !empty($data['sellPrice'])) $nuevoItem->setSellPrice($data['sellPrice']);
+                if (array_key_exists('externalIds', $data)) $nuevoItem->setExternalIds($data['externalIds']);
 
                 // Añade el Item creado al array jsonData
                 array_push($this->jsonData, $nuevoItem);
@@ -367,7 +365,7 @@ class Item {
         if (array_key_exists('origYear', $item) && !filter_var($item['origYear'], FILTER_VALIDATE_INT)) return $respuesta . 'origYear debe ser un entero';
         if (array_key_exists('rating', $item) && !filter_var($item['rating'], FILTER_VALIDATE_INT)) return $respuesta . 'rating debe ser un entero';
         if (array_key_exists('buyPrice', $item) && !is_numeric($item['buyPrice'])) return $respuesta . 'buyPrice debe ser numérico';
-        if (array_key_exists('sellPrice', $item) && !is_numeric($item['sellPrice'])) return $respuesta . 'sellPrice debe ser numérico';
+        if (array_key_exists('sellPrice', $item) && !empty($item['sellPrice']) && !is_numeric($item['sellPrice'])) return $respuesta . 'sellPrice debe ser numérico';
         if (array_key_exists('externalIds', $item) && !is_array($item['externalIds'])) return $respuesta . 'externalIds debe ser un array';
 
         return true;
