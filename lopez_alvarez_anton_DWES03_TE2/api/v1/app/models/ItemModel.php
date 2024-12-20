@@ -18,12 +18,27 @@ class ItemModel implements JsonSerializable {
     private float $sellPrice;
     private array $externalIds;
     
-    // Constructora de la clase
-    // sellPrice y externalIds podrán llegar vacíos, se les asigna un valor 0 o array vacío por defecto
+    /**
+     * Constructor de la clase ItemModel.
+     *
+     * @param int $id El ID del ítem.
+     * @param string $title El título del ítem.
+     * @param string $artist El artista del ítem.
+     * @param string $format El formato del ítem (ej. "LP", "CD").
+     * @param int $year El año de publicación del ítem.
+     * @param int $origYear El año de publicación original del ítem.
+     * @param string $label El sello discográfico.
+     * @param int $rating La calificación del ítem (de 1 a 10).
+     * @param string $comment Comentarios sobre el ítem.
+     * @param float $buyPrice El precio de compra del ítem.
+     * @param string $condition La condición del ítem (ej. "M", "NM").
+     * @param float $sellPrice El precio de venta del ítem, por defecto 0.
+     * @param array $externalIds Identificadores externos asociados al ítem, por defecto un array vacío.
+     */
     public function __construct(int $id, string $title, string $artist, 
         string $format, int $year, int $origYear, string $label, int $rating,
-        string $comment, float $buyPrice, string $condition, float $sellPrice=0,
-        array $externalIds=[]) {
+        string $comment, float $buyPrice, string $condition, float $sellPrice = 0,
+        array $externalIds = []) {
 
         $this->id = $id;
         $this->title = $title;

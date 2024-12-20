@@ -4,9 +4,20 @@ require '../config/config.php';
 require '../core/Router.php';
 require '../app/controllers/Item.php';
 require '../app/models/ItemModel.php';
+require '../utils/JSONFileUtil.php';
 require '../utils/Response.php';
 
 $url = $_SERVER['QUERY_STRING'];
+
+// Si la query contiene espacios no es válida, devolvemos el error
+if (str_contains(urldecode($url), ' ')) {
+    $res = new Response(403, 'URL no válida', 'ERROR: La URL no puede contener espacios: ' . urldecode($url));
+    $res->enviar();
+
+    die();
+}
+
+$url = urldecode($url);
 
 
 $router = new Router();
@@ -124,13 +135,15 @@ if ($router->matchRoutes($urlArray)) {
     $action = $router->getParams()['action'];
 
     try {
-        $controller = new $controller();
+        // Tanto el controlador a instanciar como el método a invocar deben existir
+        if (class_exists($controller) && method_exists($controller, $action)) {
 
-        if (method_exists($controller, $action)) {
+            $controller = new $controller();
             $resp = call_user_func_array([$controller, $action], $params);
+
         } else {
-            // Si el método no existe, se envía un error 500 con ese mensaje.
-            $res = new Response(500, 'Error en el servidor', 'El método no existe');
+            // Si el controlador o el método no existen, se envía un error 500 con ese mensaje.
+            $res = new Response(500, 'Controlador o método no definidos', 'El controlador o el método no son válidos');
             $res->enviar();
         }
 

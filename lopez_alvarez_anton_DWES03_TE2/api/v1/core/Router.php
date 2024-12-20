@@ -13,17 +13,17 @@ class Router {
         return $this->routes;
     }
 
-
+    // Los parámetros se sustituyen por expresiones regulares y se matchean
     public function matchRoutes($url) {
         foreach ($this->routes as $route=>$params) {
             $pattern = str_replace(['{id}'], ['([0-9]+)'], $route);
-            $pattern = str_replace(['{artist}'], ['([A-Za-z0-9\-]+)'], $pattern);
-            $pattern = str_replace(['{format}'], ['([A-Za-z0-9]+)'], $pattern);
-            $pattern = str_replace(['{key}'], ['([A-Za-z]+)'], $pattern);
+            $pattern = str_replace(['{artist}'], ['([a-z0-9\-]+)'], $pattern);
+            $pattern = str_replace(['{format}'], ['([a-z0-9]+)'], $pattern);
+            $pattern = str_replace(['{key}'], ['([a-z]+)'], $pattern);
             $pattern = str_replace(['{order}'], ['(asc|desc)'], $pattern);
             $pattern = str_replace(['/'], ['\/'], $pattern);
 
-            $pattern = '/^' . $pattern . '$/';
+            $pattern = '/^' . $pattern . '$/i'; // Con la "i" permitimos que los valores sean en mayúsculas o minúsculas
 
             if (preg_match($pattern, $url['path'])) {
                 $this->params = $params;

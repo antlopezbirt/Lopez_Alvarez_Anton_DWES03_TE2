@@ -1,15 +1,14 @@
 <?php
 
 // Clase que maneja las operaciones de lectura y escritura del fichero JSON
-class JSONFileutil {
-    private $jsonFile;
+class JSONFileUtil {
+    private string $jsonFilePath;
     private $jsonString;
     private $jsonDataArray;
-    private bool $ficheroValido;
 
     public function __construct($ruta) {
-        $this->jsonFile = $ruta;
-        $this->jsonString = @file_get_contents($this->jsonFile);
+        $this->jsonFilePath = $ruta;
+        $this->jsonString = @file_get_contents($this->jsonFilePath);
         $this->jsonDataArray = json_decode($this->jsonString, true);
 
         // Si hay algún problema con el fichero, lanza excepciones que llegarán en una respuesta por la API
@@ -18,27 +17,15 @@ class JSONFileutil {
 
     }
 
-    public function getJsonFile() {
-        return $this->jsonFile;
-    }
-
-    public function getJsonString() {
-        return $this->jsonString;
-    }
-
     public function getJsonDataArray() {
         return $this->jsonDataArray;
-    }
-
-    public function esValido() {
-        return $this->ficheroValido;
     }
 
     // Intenta guardar los datos actualizados en el fichero
     public function guardarDatos($jsonData) {
         
         try {
-            $fp = fopen($this->jsonFile, 'w');
+            $fp = fopen($this->jsonFilePath, 'w');
             $resultado = fwrite($fp, json_encode($jsonData, JSON_PRETTY_PRINT));
 
             if ($resultado) return true;

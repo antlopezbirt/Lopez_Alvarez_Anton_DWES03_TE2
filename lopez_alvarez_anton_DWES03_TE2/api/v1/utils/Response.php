@@ -7,48 +7,27 @@ class Response {
     private $respCode; // El código que se muestra en la respuesta
     private $description; // La descripción de la operación
     private $response;
+    private $statusCodes = [
+        200 => 'OK',
+        201 => 'Created',
+        204 => 'No Content',
+        400 => 'Bad Request',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        500 => 'Internal Server Error'
+    ];
 
     public function __construct($code, $description, $response) {
-
+        
         // Para los códigos 204, por cabecera se pasa un 200 para que llegue el body
-        if ($code != 204) {
-            $this->code = $code;
-        } else {
-            $this->code = 200;
-        }
-
+        $this->code = $code === 204 ? 200 : $code;
         $this->respCode = $code;
         $this->description = $description;
         $this->response = $response;
 
         // El status según el código
+        $this->status = $this->statusCodes[$code];
 
-        switch ($this->code) {
-            case 200: {
-                $this->status = 'OK';
-                break;
-            }
-            case 201: {
-                $this->status = 'Created';
-                break;
-            }
-            case 204: {
-                $this->status = 'No Content';
-                break;
-            }
-            case 400: {
-                $this->status = 'Bad Request';
-                break;
-            }
-            case 404: {
-                $this->status = 'Not Found';
-                break;
-            }
-            case 500: {
-                $this->status = 'Internal Server Error';
-                break;
-            }
-        }
     }
 
     public function enviar() {

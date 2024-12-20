@@ -2,4 +2,4 @@ RewriteEngine On
 RewriteBase /lopez_alvarez_anton_DWES03_TE2/api/v1/public/
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ index.php?/$1 [L,QSA]
+RewriteRule ^(.*)$ index.php?/$1 [B,QSA,L]

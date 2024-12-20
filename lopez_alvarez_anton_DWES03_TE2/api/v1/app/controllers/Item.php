@@ -1,7 +1,5 @@
 <?php
 
-require ('../utils/JSONFileUtil.php');
-
 class Item {
 
     private $ficheroJson;
@@ -92,7 +90,7 @@ class Item {
 
         // En caso contrario un 404
         } else {
-            $res = new Response(404, $descripcion, 'Artista no encontrado');
+            $res = new Response(404, $descripcion, 'ERROR: Artista no encontrado (' . $artist . ')');
             $res->enviar();
         }
     }
@@ -133,12 +131,22 @@ class Item {
     // Ordena los items en base a una clave y un orden recibidos
     function sortItemsByKey($key, $order) {
 
-        $descripcion = 'Listado de todos los ítems ordenados según el criterio solicitado (' . $key . ', ' . $order . ')';
+        $order = strtolower($order);
+
+        $descripcion = 'Listado de ítems ordenados según el criterio solicitado (' . $key . ', ' . $order . ')';
 
         // Primero comprueba si la clave recibida existe en el JSON
         if (array_key_exists($key, $this->jsonData[0])) {
 
-            $order = $order == 'asc' ? SORT_ASC : SORT_DESC;
+            if ($key === 'externalIds') {
+                // Responde con todos los items serializados
+                $res = new Response(400, $descripcion, 'ERROR: No se puede ordenar por externalIds al ser un array');
+                $res->enviar();
+
+                return false;
+            }
+
+            $order = $order === 'asc' ? SORT_ASC : SORT_DESC;
 
             // Ordena los items según los parámetros recibidos
             array_multisort(array_column($this->jsonData, $key), $order, $this->jsonData);
@@ -370,7 +378,7 @@ class Item {
         if (array_key_exists('buyPrice', $item) && (!is_numeric($item['buyPrice']) || intval($item['buyPrice']) < 0)) return $respuesta . 'buyPrice debe ser un número mayor o igual que cero';
         if (array_key_exists('condition', $item) && !in_array($item['condition'], ['M','NM','E','VG','G','P'])) return $respuesta . 'condition debe contener un valor de la Goldmine Grading Guide (M, NM, E, VG, G, P)';
         if (array_key_exists('sellPrice', $item) && (!is_numeric($item['sellPrice']) || intval($item['sellPrice']) < 0)) return $respuesta . 'sellPrice debe ser un número mayor o igual que cero';
-        if (array_key_exists('externalIds', $item) && !is_array($item['externalIds'])) return $respuesta . 'externalIds debe ser un array';
+        if (array_key_exists('externalIds', $item) && !is_array($item['externalIds'])) return $respuesta . 'externalIds debe ser un array asociativo de identificadores externos';
 
         return true;
     }
