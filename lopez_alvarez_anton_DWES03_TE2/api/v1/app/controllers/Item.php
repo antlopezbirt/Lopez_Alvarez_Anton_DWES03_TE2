@@ -182,8 +182,18 @@ class Item {
             return false;
         }
 
-        // Si se recibe más de una entrada llega como array multidimensional y no se acepta
+        // Si se recibe más de una entrada, llega como array multidimensional y no se acepta
         if (!array_key_exists(0, $data)) {
+
+            // Comprueba que los campos que no son string tengan buen formato
+            if ($this->chequearValores($data) !== true) {
+                
+                $textoRespuesta = $this->chequearValores($data);
+
+                $res = new Response(400, $descripcion, $textoRespuesta);
+                $res->enviar();
+                return false;
+            }
 
             // Genera un nuevo ID a partir del mas alto encontrado en el registro
             $nuevoId = 0;
@@ -197,7 +207,12 @@ class Item {
                     $data['artist'], $data['format'], $data['year'], 
                     $data['origYear'], $data['label'], $data['rating'],
                     $data['comment'], $data['buyPrice'], $data['condition'], 
-                    $data['sellPrice'], $data['externalIds']);
+                    $data['sellPrice']);
+
+                // Si llega con externalIds, los seteamos, si no el objeto le asignará un array vacío por defecto.
+                if (array_key_exists('externalIds', $data)) {
+                    $nuevoItem->setExternalIds($data['externalIds']);
+                }
 
                 // Añade el Item creado al array jsonData
                 array_push($this->jsonData, $nuevoItem);
@@ -234,6 +249,16 @@ class Item {
             $res = new Response(400, $descripcion, 'ERROR: Formato no válido de los datos recibidos');
             $res->enviar();
 
+            return false;
+        }
+
+        // Comprueba que los campos que no son string tengan buen formato
+        if ($this->chequearValores($data) !== true) {
+                
+            $textoRespuesta = $this->chequearValores($data);
+
+            $res = new Response(400, $descripcion, $textoRespuesta);
+            $res->enviar();
             return false;
         }
 
@@ -282,7 +307,7 @@ class Item {
 
                 // Escribe los datos actualizados en el fichero
                 if ($this->ficheroJson->guardarDatos($this->jsonData)) {
-                    
+
                     // En caso de éxito devuelve un 204 (cabecera 200) y el ítem actualizado
                     $res = new Response(204, $descripcion, $itemActualizar);
                     $res->enviar();
@@ -334,5 +359,17 @@ class Item {
         // Si llega aquí es que no ha encontrado el item, devuelve un 404
         $res = new Response(404, $descripcion, 'ERROR: Ítem no encontrado (' . $id . ')');
         $res->enviar();
+    }
+
+    public function chequearValores($item) {
+        $respuesta = 'ERROR: El campo ';
+        if (array_key_exists('year', $item) && !filter_var($item['year'], FILTER_VALIDATE_INT)) return $respuesta . 'year debe ser un entero.';
+        if (array_key_exists('origYear', $item) && !filter_var($item['origYear'], FILTER_VALIDATE_INT)) return $respuesta . 'origYear debe ser un entero';
+        if (array_key_exists('rating', $item) && !filter_var($item['rating'], FILTER_VALIDATE_INT)) return $respuesta . 'rating debe ser un entero';
+        if (array_key_exists('buyPrice', $item) && !is_numeric($item['buyPrice'])) return $respuesta . 'buyPrice debe ser numérico';
+        if (array_key_exists('sellPrice', $item) && !is_numeric($item['sellPrice'])) return $respuesta . 'sellPrice debe ser numérico';
+        if (array_key_exists('externalIds', $item) && !is_array($item['externalIds'])) return $respuesta . 'externalIds debe ser un array';
+
+        return true;
     }
 }
