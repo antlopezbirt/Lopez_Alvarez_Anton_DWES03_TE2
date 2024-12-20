@@ -338,6 +338,9 @@ class Item {
                 // Retira el item de jsonData
                 unset($this->jsonData[$key]);
 
+                // Reordena las claves del array tras eliminar, evita codificar las claves en JSON
+                $this->jsonData = array_values($this->jsonData);
+
                 // Escribe los datos actualizados en el fichero
                 if ($this->ficheroJson->guardarDatos($this->jsonData)) {
                     // En caso de éxito devuelve un 204 (cabecera 200) y el ítem eliminado
