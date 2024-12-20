@@ -286,6 +286,8 @@ class Item {
                             return false;
                         }
 
+                        if ($clave === 'sellPrice') $valor = empty($valor) ? 0 : floatval($valor);
+
                         $setter = 'set' . ucwords($clave);
 
                         // Llama al método setter correspondiente y actualiza el atributo
@@ -361,11 +363,11 @@ class Item {
 
     public function chequearValores($item) {
         $respuesta = 'ERROR: El campo ';
-        if (array_key_exists('year', $item) && !filter_var($item['year'], FILTER_VALIDATE_INT)) return $respuesta . 'year debe ser un entero.';
-        if (array_key_exists('origYear', $item) && !filter_var($item['origYear'], FILTER_VALIDATE_INT)) return $respuesta . 'origYear debe ser un entero';
-        if (array_key_exists('rating', $item) && !filter_var($item['rating'], FILTER_VALIDATE_INT)) return $respuesta . 'rating debe ser un entero';
-        if (array_key_exists('buyPrice', $item) && !is_numeric($item['buyPrice'])) return $respuesta . 'buyPrice debe ser numérico';
-        if (array_key_exists('sellPrice', $item) && !empty($item['sellPrice']) && !is_numeric($item['sellPrice'])) return $respuesta . 'sellPrice debe ser numérico';
+        if (array_key_exists('year', $item) && (!filter_var($item['year'], FILTER_VALIDATE_INT) || intval($item['year']) <= 1799)) return $respuesta . 'year debe ser un entero mayor que 1800';
+        if (array_key_exists('origYear', $item) && (!filter_var($item['origYear'], FILTER_VALIDATE_INT) || intval($item['origYear']) <= 1799)) return $respuesta . 'origYear debe ser un entero mayor que 1800';
+        if (array_key_exists('rating', $item) && (!filter_var($item['rating'], FILTER_VALIDATE_INT) || intval($item['rating']) < 1 || intval($item['rating']) > 10)) return $respuesta . 'rating debe ser un entero entre 1 y 10';
+        if (array_key_exists('buyPrice', $item) && (!is_numeric($item['buyPrice']) || intval($item['buyPrice']) < 0)) return $respuesta . 'buyPrice debe ser un número mayor o igual que cero';
+        if (array_key_exists('sellPrice', $item) && (!is_numeric($item['sellPrice']) || intval($item['sellPrice']) < 0)) return $respuesta . 'sellPrice debe ser un número mayor o igual que cero';
         if (array_key_exists('externalIds', $item) && !is_array($item['externalIds'])) return $respuesta . 'externalIds debe ser un array';
 
         return true;

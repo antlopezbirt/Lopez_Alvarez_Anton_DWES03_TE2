@@ -236,17 +236,16 @@
         "title": "Through the Looking Glass",
         "artist": "Midori Takada",
         "format": "2CD",
-        "year": 2020,
+        "year": 1899,
         "origYear": 1985,
         "label": "WRWTFWW Records",
-        "rating": 9,
+        "rating": -1,
         "comment": "Reedici\u00f3n suiza con descarga digital. Muy bueno.",
-        "buyPrice": 20,
+        "buyPrice": 0,
         "condition": "NM",
-        "sellPrice": 28,
+        "sellPrice": 0,
         "externalIds": {
-            "discogs": "9975883",
-            "musicbrainz": "76dccf5b-c8b0-44b1-93a8-fb739a066bc4"
+            "discogs": "8855"
         }
     },
     {
