@@ -230,5 +230,59 @@
             "discogs": "651058",
             "musicbrainz": "2defbea3-6f9d-43f1-bac7-fdd196cf65a7"
         }
+    },
+    {
+        "id": 113,
+        "title": "Through the Looking Glass",
+        "artist": "Midori Takada",
+        "format": "CD",
+        "year": "2017",
+        "origYear": "1983",
+        "label": "WRWTFWW Records",
+        "rating": "9",
+        "comment": "Reedici\u00f3n suiza con descarga digital. Muy bueno.",
+        "buyPrice": "20",
+        "condition": "NM",
+        "sellPrice": "28",
+        "externalIds": {
+            "discogs": "9975883",
+            "musicbrainz": "76dccf5b-c8b0-44b1-93a8-fb739a066bc4"
+        }
+    },
+    {
+        "id": 114,
+        "title": "Through the Looking Glass",
+        "artist": "Midori Takada",
+        "format": "CD",
+        "year": "2017",
+        "origYear": "1983",
+        "label": "WRWTFWW Records",
+        "rating": "9",
+        "comment": "Reedici\u00f3n suiza con descarga digital. Muy bueno.",
+        "buyPrice": "20",
+        "condition": "NM",
+        "sellPrice": "28",
+        "externalIds": {
+            "discogs": "9975883",
+            "musicbrainz": "76dccf5b-c8b0-44b1-93a8-fb739a066bc4"
+        }
+    },
+    {
+        "id": 115,
+        "title": "Through the Looking Glass",
+        "artist": "Midori Takada",
+        "format": "CD",
+        "year": "2017",
+        "origYear": "1983",
+        "label": "WRWTFWW Records",
+        "rating": "9",
+        "comment": "Reedici\u00f3n suiza con descarga digital. Muy bueno.",
+        "buyPrice": "20",
+        "condition": "NM",
+        "sellPrice": "28",
+        "externalIds": {
+            "discogs": "9975883",
+            "musicbrainz": "76dccf5b-c8b0-44b1-93a8-fb739a066bc4"
+        }
     }
 ]

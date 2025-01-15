@@ -38,4 +38,16 @@ class JsonFileHandler {
 
         return $items;
     }
+
+    public function writeItem(ItemModel $item) {
+        $items = $this->readAllItems();
+        array_push($items, $item);
+
+        if(file_put_contents($this->rutaFichero, json_encode($items, JSON_PRETTY_PRINT))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 }

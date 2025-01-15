@@ -15,6 +15,6 @@ require_once __DIR__ . '/../config/config.php';
 $url = $_SERVER['REQUEST_URI'];
 
 $router = new Router();
-$router->dispatch($url);
+$router->match($url);
 
 ?>
